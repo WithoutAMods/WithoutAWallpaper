@@ -29,14 +29,16 @@ public class WallpaperItem extends Item {
 		World world = context.getWorld();
 		if (!world.isRemote) {
 			BlockPos pos = world.getBlockState(context.getPos()).getMaterial().isReplaceable() ? context.getPos() : context.getPos().offset(context.getFace());
-			Direction face = context.getFace().getOpposite();
-			BlockState state = world.getBlockState(pos);
-			if (state.getBlock() != Registration.WALLPAPER_BLOCK.get()) {
-				state = Registration.WALLPAPER_BLOCK.get().getDefaultState();
+			if (world.getBlockState(pos).getMaterial().isReplaceable() || world.getBlockState(pos).getBlock() == Registration.WALLPAPER_BLOCK.get()) {
+				Direction face = context.getFace().getOpposite();
+				BlockState state = world.getBlockState(pos);
+				if (state.getBlock() != Registration.WALLPAPER_BLOCK.get()) {
+					state = Registration.WALLPAPER_BLOCK.get().getDefaultState();
+				}
+				world.setBlockState(pos, state.with(WallpaperBlock.getProperty(face), type));
+				context.getItem().shrink(1);
+				return ActionResultType.SUCCESS;
 			}
-			world.setBlockState(pos, state.with(WallpaperBlock.getProperty(face), type));
-			context.getItem().shrink(1);
-			return ActionResultType.SUCCESS;
 		}
 		return super.onItemUse(context);
 	}
