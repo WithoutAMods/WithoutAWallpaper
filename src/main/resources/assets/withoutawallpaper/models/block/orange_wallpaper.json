@@ -1,0 +1,6 @@
+{
+  "parent": "withoutawallpaper:block/wallpaper",
+  "textures": {
+    "wallpaper": "withoutawallpaper:block/orange_wallpaper"
+  }
+}

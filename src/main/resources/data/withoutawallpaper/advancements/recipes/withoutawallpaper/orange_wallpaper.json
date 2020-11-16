@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "withoutawallpaper:orange_wallpaper"
+    ]
+  },
+  "criteria": {
+    "paper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:paper"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "withoutawallpaper:orange_wallpaper"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "paper",
+      "has_the_recipe"
+    ]
+  ]
+}

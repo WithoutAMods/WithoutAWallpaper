@@ -1,0 +1,57 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "north": "orange"
+      },
+      "apply": {
+        "model": "withoutawallpaper:block/orange_wallpaper"
+      }
+    },
+    {
+      "when": {
+        "east": "orange"
+      },
+      "apply": {
+        "model": "withoutawallpaper:block/orange_wallpaper",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "orange"
+      },
+      "apply": {
+        "model": "withoutawallpaper:block/orange_wallpaper",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "orange"
+      },
+      "apply": {
+        "model": "withoutawallpaper:block/orange_wallpaper",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "orange"
+      },
+      "apply": {
+        "model": "withoutawallpaper:block/orange_wallpaper",
+        "x": -90
+      }
+    },
+    {
+      "when": {
+        "down": "orange"
+      },
+      "apply": {
+        "model": "withoutawallpaper:block/orange_wallpaper",
+        "x": 90
+      }
+    }
+  ]
+}
