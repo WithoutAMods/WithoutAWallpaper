@@ -3,9 +3,9 @@ package withoutaname.mods.withoutawallpaper.datagen;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.util.Direction;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ExistingFileHelper;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.MultiPartBlockStateBuilder;
-import net.minecraftforge.common.data.ExistingFileHelper;
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
 import withoutaname.mods.withoutawallpaper.blocks.WallpaperBlock;
 import withoutaname.mods.withoutawallpaper.setup.Registration;
@@ -33,12 +33,12 @@ public class BlockStates extends BlockStateProvider {
 		MultiPartBlockStateBuilder builder = getMultipartBuilder(Registration.WALLPAPER_BLOCK.get());
 		ModelFile model;
 		for (WallpaperType type : WallpaperType.getValuesExceptNone()) {
-			itemModels().withExistingParent(type.getString() + "_wallpaper", mcLoc("item/generated"))
-					.texture("layer0", modLoc("block/" + type.getString() + "_wallpaper"));
+			itemModels().withExistingParent(type.getName() + "_wallpaper", mcLoc("item/generated"))
+					.texture("layer0", modLoc("block/" + type.getName() + "_wallpaper"));
 
-			model = models().getBuilder("block/" + type.getString() + "_wallpaper")
+			model = models().getBuilder("block/" + type.getName() + "_wallpaper")
 					.parent(wallpaperModel)
-					.texture("wallpaper", modLoc("block/" + type.getString() + "_wallpaper"));
+					.texture("wallpaper", modLoc("block/" + type.getName() + "_wallpaper"));
 			addModel(builder, model, 0, 0, Direction.NORTH, type);
 			addModel(builder, model, 90, 0, Direction.EAST, type);
 			addModel(builder, model, 180, 0, Direction.SOUTH, type);

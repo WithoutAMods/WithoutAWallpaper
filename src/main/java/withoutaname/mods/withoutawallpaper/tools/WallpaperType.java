@@ -13,13 +13,13 @@ public enum WallpaperType implements IStringSerializable {
 	}
 
 	@Override
-	public String getString() {
+	public String getName() {
 		return name;
 	}
 
 	@Override
 	public String toString() {
-		return getString();
+		return getName();
 	}
 
 	public static WallpaperType[] getValuesExceptNone() {
