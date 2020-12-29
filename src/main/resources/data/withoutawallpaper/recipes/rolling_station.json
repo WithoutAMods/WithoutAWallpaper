@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DD",
+    "WW",
+    "WW"
+  ],
+  "key": {
+    "D": {
+      "tag": "forge:dyes"
+    },
+    "W": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "result": {
+    "item": "withoutawallpaper:rolling_station"
+  }
+}

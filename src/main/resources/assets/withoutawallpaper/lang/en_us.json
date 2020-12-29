@@ -1,5 +1,6 @@
 {
   "block.withoutawallpaper.wallpaper": "Wallpaper",
-  "item.withoutawallpaper.orange_wallpaper": "Orange Wallpaper",
-  "itemGroup.withoutawallpaper": "WithoutAWallpaper"
+  "item.withoutawallpaper.wallpaper": "Wallpaper",
+  "itemGroup.withoutawallpaper": "WithoutAWallpaper",
+  "screen.withoutawallpaper.rolling_station": "Rolling Station"
 }

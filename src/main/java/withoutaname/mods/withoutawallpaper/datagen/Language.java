@@ -22,7 +22,9 @@ public class Language extends LanguageProvider {
 	protected void addTranslations() {
 		add(Registration.WALLPAPER_BLOCK.get(), WALLPAPER_DE_DE, WALLPAPER_EN_US);
 
-		add(Registration.ORANGE_WALLPAPER_ITEM.get(), "Orange " + WALLPAPER_DE_DE, "Orange " + WALLPAPER_EN_US);
+		add(Registration.WALLPAPER_ITEM.get(), WALLPAPER_DE_DE, WALLPAPER_EN_US);
+
+		add("screen.withoutawallpaper.rolling_station", "Rolling Station", "Rolling Station");
 
 		add("itemGroup.withoutawallpaper", "WithoutAWallpaper", "WithoutAWallpaper");
 	}

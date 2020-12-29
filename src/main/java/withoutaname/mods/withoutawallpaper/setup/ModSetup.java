@@ -3,6 +3,7 @@ package withoutaname.mods.withoutawallpaper.setup;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class ModSetup {
@@ -11,7 +12,7 @@ public class ModSetup {
 
 		@Override
 		public ItemStack createIcon() {
-			return new ItemStack(Registration.ORANGE_WALLPAPER_ITEM.get());
+			return new ItemStack(Items.ORANGE_DYE);
 		}
 
 	};

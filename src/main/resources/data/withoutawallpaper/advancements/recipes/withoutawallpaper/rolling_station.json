@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "withoutawallpaper:rolling_station"
+    ]
+  },
+  "criteria": {
+    "rolling_station": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "minecraft:planks"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "withoutawallpaper:rolling_station"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "rolling_station",
+      "has_the_recipe"
+    ]
+  ]
+}
