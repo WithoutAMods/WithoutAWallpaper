@@ -4,14 +4,17 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.PushReaction;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 
@@ -24,8 +27,8 @@ public class WallpaperBlock extends Block {
 
 	public WallpaperBlock() {
 		super(Properties.create(Material.MISCELLANEOUS)
-				.sound(SoundType.CLOTH)
-				.hardnessAndResistance(0.5F));
+				.sound(new SoundType(1.0f, 1.0f, SoundEvents.ENTITY_VILLAGER_WORK_LIBRARIAN, SoundEvents.ENTITY_VILLAGER_WORK_LIBRARIAN, SoundEvents.ENTITY_VILLAGER_WORK_LIBRARIAN, SoundEvents.ENTITY_VILLAGER_WORK_LIBRARIAN, SoundEvents.ENTITY_VILLAGER_WORK_LIBRARIAN))
+				.hardnessAndResistance(0.1F).doesNotBlockMovement());
 	}
 
 	@Nullable
@@ -40,8 +43,16 @@ public class WallpaperBlock extends Block {
 	}
 
 	@SuppressWarnings("deprecation")
+	@NotNull
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+	public PushReaction getPushReaction(@NotNull BlockState state) {
+		return PushReaction.DESTROY;
+	}
+
+	@SuppressWarnings("deprecation")
+	@NotNull
+	@Override
+	public VoxelShape getShape(@NotNull BlockState state, IBlockReader worldIn, @NotNull BlockPos pos, @NotNull ISelectionContext context) {
 		List<VoxelShape> shapeList = new ArrayList<>();
 
 		TileEntity te = worldIn.getTileEntity(pos);
@@ -68,7 +79,7 @@ public class WallpaperBlock extends Block {
 			}
 		}
 		if (shapeList.isEmpty()) {
-			shapeList.add(Block.makeCuboidShape(1.0D, 1.0D, 1.0D, 15.0D, 15.0D, 15.0D));
+			shapeList.add(VoxelShapes.empty());
 		}
 		VoxelShape shape = shapeList.get(0);
 		for (int i = 1; i < shapeList.size(); i++) {
