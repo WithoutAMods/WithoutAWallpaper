@@ -9,6 +9,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
+import org.jetbrains.annotations.NotNull;
 import withoutaname.mods.withoutawallpaper.setup.Registration;
 
 import java.util.function.Consumer;
@@ -20,9 +21,9 @@ public class Recipes extends RecipeProvider{
 	}
 
 	@Override
-	protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
+	protected void registerRecipes(@NotNull Consumer<IFinishedRecipe> consumer) {
 		/*
-		Not possible to generate criterion with tag
+		Not possible to generate criterion with tag (manually added)
 
 		ShapedRecipeBuilder.shapedRecipe(Registration.ROLLING_STATION_BLOCK.get())
 				.patternLine("DD")

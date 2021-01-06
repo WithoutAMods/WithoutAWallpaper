@@ -11,6 +11,8 @@ public class Language extends LanguageProvider {
 
 	public static final String WALLPAPER_DE_DE = "Tapete";
 	public static final String WALLPAPER_EN_US = "Wallpaper";
+	public static final String PASTING_TABLE_DE_DE = "Tapeziertisch";
+	public static final String PASTING_TABLE_EN_US = "Pasting Table";
 	private final String locale;
 
 	public Language(DataGenerator gen, String locale) {
@@ -21,10 +23,10 @@ public class Language extends LanguageProvider {
 	@Override
 	protected void addTranslations() {
 		add(Registration.WALLPAPER_BLOCK.get(), WALLPAPER_DE_DE, WALLPAPER_EN_US);
-
 		add(Registration.WALLPAPER_ITEM.get(), WALLPAPER_DE_DE, WALLPAPER_EN_US);
 
-		add("screen.withoutawallpaper.rolling_station", "Rolling Station", "Rolling Station");
+		add(Registration.PASTING_TABLE_BLOCK.get(), PASTING_TABLE_DE_DE, PASTING_TABLE_EN_US);
+		add("screen.withoutawallpaper.pasting_table", PASTING_TABLE_DE_DE, PASTING_TABLE_EN_US);
 
 		add("itemGroup.withoutawallpaper", "WithoutAWallpaper", "WithoutAWallpaper");
 	}

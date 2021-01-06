@@ -1,6 +1,7 @@
 {
+  "block.withoutawallpaper.pasting_table": "Pasting Table",
   "block.withoutawallpaper.wallpaper": "Wallpaper",
   "item.withoutawallpaper.wallpaper": "Wallpaper",
   "itemGroup.withoutawallpaper": "WithoutAWallpaper",
-  "screen.withoutawallpaper.rolling_station": "Rolling Station"
+  "screen.withoutawallpaper.pasting_table": "Pasting Table"
 }

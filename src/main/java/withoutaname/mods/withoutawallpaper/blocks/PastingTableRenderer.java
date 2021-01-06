@@ -13,19 +13,19 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import org.jetbrains.annotations.NotNull;
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
 import withoutaname.mods.withoutawallpaper.setup.Registration;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
-public class RollingStationRenderer extends TileEntityRenderer<RollingStationTile> {
+public class PastingTableRenderer extends TileEntityRenderer<PastingTableTile> {
 
 	public static final ResourceLocation DYES_TEXTURE = new ResourceLocation(WithoutAWallpaper.MODID, "block/rolling_station/dyes");
 
-	public RollingStationRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
+	public PastingTableRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
 		super(rendererDispatcherIn);
 	}
 
@@ -43,7 +43,7 @@ public class RollingStationRenderer extends TileEntityRenderer<RollingStationTil
 	}
 
 	@Override
-	public void render(RollingStationTile tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+	public void render(PastingTableTile tileEntityIn, float partialTicks, MatrixStack matrixStackIn, @NotNull IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		matrixStackIn.push();
 		Quaternion rotation;
 				switch (tileEntityIn.getBlockState().get(BlockStateProperties.HORIZONTAL_FACING)) {
@@ -109,7 +109,7 @@ public class RollingStationRenderer extends TileEntityRenderer<RollingStationTil
 	}
 
 	public static void register() {
-		ClientRegistry.bindTileEntityRenderer(Registration.ROLLING_STATION_TILE.get(), RollingStationRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(Registration.PASTING_TABLE_TILE.get(), PastingTableRenderer::new);
 	}
 
 }

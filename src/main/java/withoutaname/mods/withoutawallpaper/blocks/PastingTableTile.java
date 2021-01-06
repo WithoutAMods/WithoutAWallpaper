@@ -27,19 +27,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class RollingStationTile extends TileEntity {
+public class PastingTableTile extends TileEntity {
 
 	private WallpaperDesign selectedWallpaperDesign = WallpaperDesign.NONE;
 	private WallpaperType wallpaperType = WallpaperType.NONE;
 
-	private final HashMap<RollingStationContainer, Consumer<WallpaperType>> wallpaperChangedListeners = new HashMap<>();
+	private final HashMap<PastingTableContainer, Consumer<WallpaperType>> wallpaperChangedListeners = new HashMap<>();
 
 	private final ItemStackHandler itemHandler = createInputHandler();
 
 	private final LazyOptional<IItemHandler> itemHandlerLazyOptional = LazyOptional.of(() -> itemHandler);
 
-	public RollingStationTile() {
-		super(Registration.ROLLING_STATION_TILE.get());
+	public PastingTableTile() {
+		super(Registration.PASTING_TABLE_TILE.get());
 	}
 
 	@NotNull
@@ -75,16 +75,14 @@ public class RollingStationTile extends TileEntity {
 		} else {
 			wallpaperType = WallpaperType.NONE;
 		}
-		wallpaperChangedListeners.forEach((rollingStationContainer, wallpaperTypeConsumer) -> {
-			wallpaperTypeConsumer.accept(wallpaperType);
-		});
+		wallpaperChangedListeners.forEach((rollingStationContainer, wallpaperTypeConsumer) -> wallpaperTypeConsumer.accept(wallpaperType));
 	}
 
-	public void addWallpaperChangedListener(RollingStationContainer container, Consumer<WallpaperType> wallpaperChangedListener) {
+	public void addWallpaperChangedListener(PastingTableContainer container, Consumer<WallpaperType> wallpaperChangedListener) {
 		wallpaperChangedListeners.put(container, wallpaperChangedListener);
 	}
 
-	public void removeWallpaperChangedListener(RollingStationContainer container) {
+	public void removeWallpaperChangedListener(PastingTableContainer container) {
 		wallpaperChangedListeners.remove(container);
 	}
 
@@ -132,7 +130,7 @@ public class RollingStationTile extends TileEntity {
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT nbt) {
+	public void read(@NotNull BlockState state, @NotNull CompoundNBT nbt) {
 		readData(nbt);
 		super.read(state, nbt);
 		update();
@@ -144,8 +142,9 @@ public class RollingStationTile extends TileEntity {
 		updateWallpaper();
 	}
 
+	@NotNull
 	@Override
-	public CompoundNBT write(CompoundNBT nbt) {
+	public CompoundNBT write(@NotNull CompoundNBT nbt) {
 		writeData(nbt);
 
 		return super.write(nbt);

@@ -13,22 +13,21 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
-import withoutaname.mods.withoutawallpaper.blocks.RollingStationRenderer;
-import withoutaname.mods.withoutawallpaper.blocks.RollingStationScreen;
+import withoutaname.mods.withoutawallpaper.blocks.PastingTableRenderer;
+import withoutaname.mods.withoutawallpaper.blocks.PastingTableScreen;
 import withoutaname.mods.withoutawallpaper.blocks.WallpaperModelLoader;
 
-import static withoutaname.mods.withoutawallpaper.blocks.RollingStationRenderer.DYES_TEXTURE;
+import static withoutaname.mods.withoutawallpaper.blocks.PastingTableRenderer.DYES_TEXTURE;
+import static withoutaname.mods.withoutawallpaper.blocks.WallpaperBakedModel.PARTICLE_TEXTURE;
 
 @Mod.EventBusSubscriber(modid = WithoutAWallpaper.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
 
 	public static void init(final FMLClientSetupEvent event) {
-		ScreenManager.registerFactory(Registration.ROLLING_STATION_CONTAINER.get(), RollingStationScreen::new);
-		RollingStationRenderer.register();
+		ScreenManager.registerFactory(Registration.PASTING_TABLE_CONTAINER.get(), PastingTableScreen::new);
+		PastingTableRenderer.register();
 
-		event.enqueueWork(() -> {
-			RenderTypeLookup.setRenderLayer(Registration.WALLPAPER_BLOCK.get(), (renderType) -> renderType.equals(RenderType.getTranslucent()));
-		});
+		event.enqueueWork(() -> RenderTypeLookup.setRenderLayer(Registration.WALLPAPER_BLOCK.get(), (renderType) -> renderType.equals(RenderType.getTranslucent())));
 	}
 
 	@SubscribeEvent
@@ -40,6 +39,7 @@ public class ClientSetup {
 	public static void onTextureStitch(TextureStitchEvent.Pre event) {
 		if (event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
 			event.addSprite(DYES_TEXTURE);
+			event.addSprite(PARTICLE_TEXTURE);
 		}
 
 	}

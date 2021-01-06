@@ -35,13 +35,13 @@ public class Registration {
 	public static final RegistryObject<WallpaperItem> WALLPAPER_ITEM = ITEMS.register("wallpaper", WallpaperItem::new);
 	public static final RegistryObject<TileEntityType<WallpaperTile>> WALLPAPER_TILE = TILES.register("wallpaper", () -> TileEntityType.Builder.create(WallpaperTile::new, WALLPAPER_BLOCK.get()).build(null));
 
-	public static final RegistryObject<RollingStationBlock> ROLLING_STATION_BLOCK = BLOCKS.register("rolling_station", RollingStationBlock::new);
-	public static final RegistryObject<BlockItem> ROLLING_STATION_ITEM = ITEMS.register("rolling_station", () -> new BlockItem(ROLLING_STATION_BLOCK.get(), ModSetup.defaultItemProperties));
-	public static final RegistryObject<TileEntityType<RollingStationTile>> ROLLING_STATION_TILE = TILES.register("rolling_station", () -> TileEntityType.Builder.create(RollingStationTile::new, ROLLING_STATION_BLOCK.get()).build(null));
-	public static final RegistryObject<ContainerType<RollingStationContainer>> ROLLING_STATION_CONTAINER = CONTAINERS.register("rolling_station", () -> IForgeContainerType.create((windowId, inv, data) -> {
+	public static final RegistryObject<PastingTableBlock> PASTING_TABLE_BLOCK = BLOCKS.register("pasting_table", PastingTableBlock::new);
+	public static final RegistryObject<BlockItem> PASTING_TABLE_ITEM = ITEMS.register("pasting_table", () -> new BlockItem(PASTING_TABLE_BLOCK.get(), ModSetup.defaultItemProperties));
+	public static final RegistryObject<TileEntityType<PastingTableTile>> PASTING_TABLE_TILE = TILES.register("pasting_table", () -> TileEntityType.Builder.create(PastingTableTile::new, PASTING_TABLE_BLOCK.get()).build(null));
+	public static final RegistryObject<ContainerType<PastingTableContainer>> PASTING_TABLE_CONTAINER = CONTAINERS.register("pasting_table", () -> IForgeContainerType.create((windowId, inv, data) -> {
 		BlockPos pos = data.readBlockPos();
 		World world = inv.player.getEntityWorld();
-		return new RollingStationContainer(windowId, world, pos, inv, inv.player);
+		return new PastingTableContainer(windowId, world, pos, inv, inv.player);
 	}));
 
 }

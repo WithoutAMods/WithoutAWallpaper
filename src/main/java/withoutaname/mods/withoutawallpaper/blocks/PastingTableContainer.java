@@ -22,7 +22,7 @@ import withoutaname.mods.withoutawallpaper.setup.Registration;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
-public class RollingStationContainer extends BaseContainer {
+public class PastingTableContainer extends BaseContainer {
 
 	private TileEntity tileEntity;
 	private PlayerEntity playerEntity;
@@ -34,8 +34,8 @@ public class RollingStationContainer extends BaseContainer {
 	private Slot dyeSlot2;
 	private Slot outputSlot;
 
-	public RollingStationContainer(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
-		super(Registration.ROLLING_STATION_CONTAINER.get(), windowId, 5);
+	public PastingTableContainer(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
+		super(Registration.PASTING_TABLE_CONTAINER.get(), windowId, 5);
 		this.tileEntity = world.getTileEntity(pos);
 		this.playerEntity = player;
 		this.playerInventory = new InvWrapper(playerInventory);
@@ -48,7 +48,7 @@ public class RollingStationContainer extends BaseContainer {
 			});
 			outputSlot = addSlot(new Slot(new Inventory(1), 0, 12, 60) {
 
-				public boolean isItemValid(ItemStack stack) {
+				public boolean isItemValid(@NotNull ItemStack stack) {
 					return false;
 				}
 
@@ -56,24 +56,24 @@ public class RollingStationContainer extends BaseContainer {
 				public ItemStack onTake(@NotNull PlayerEntity thePlayer, @NotNull ItemStack stack) {
 					WallpaperType wallpaperType = WallpaperType.fromNBT(stack.getTag().getCompound("wallpaperType"));
 
-					RollingStationContainer.this.paperSlot.decrStackSize(1);
+					PastingTableContainer.this.paperSlot.decrStackSize(1);
 
 					if (wallpaperType.getDesign().getColorCount() > 0) {
-						RollingStationContainer.this.dyeSlot0.decrStackSize(1);
+						PastingTableContainer.this.dyeSlot0.decrStackSize(1);
 					}
 					if (wallpaperType.getDesign().getColorCount() > 1) {
-						RollingStationContainer.this.dyeSlot1.decrStackSize(1);
+						PastingTableContainer.this.dyeSlot1.decrStackSize(1);
 					}
 					if (wallpaperType.getDesign().getColorCount() > 2) {
-						RollingStationContainer.this.dyeSlot2.decrStackSize(1);
+						PastingTableContainer.this.dyeSlot2.decrStackSize(1);
 					}
 
 					return super.onTake(thePlayer, stack);
 				}
 
 			});
-			if (tileEntity instanceof RollingStationTile) {
-				RollingStationTile rollingStationTile = (RollingStationTile) this.tileEntity;
+			if (tileEntity instanceof PastingTableTile) {
+				PastingTableTile rollingStationTile = (PastingTableTile) this.tileEntity;
 				trackInt(new IntReferenceHolder() {
 					@Override
 					public int get() {
@@ -95,7 +95,7 @@ public class RollingStationContainer extends BaseContainer {
 	}
 
 	private void updateOutput(WallpaperType wallpaperType) {
-		if (wallpaperType.getDesign() != WallpaperDesign.NONE && RollingStationContainer.this.paperSlot.getHasStack()) {
+		if (wallpaperType.getDesign() != WallpaperDesign.NONE && PastingTableContainer.this.paperSlot.getHasStack()) {
 			ItemStack itemStack = new ItemStack(Registration.WALLPAPER_ITEM.get());
 			itemStack.getOrCreateTag().put("wallpaperType", wallpaperType.toNBT());
 			itemStack.setCount(8);
@@ -106,9 +106,9 @@ public class RollingStationContainer extends BaseContainer {
 	}
 
 	@Override
-	public boolean enchantItem(PlayerEntity playerIn, int id) {
-		if (id >= 0 && id < WallpaperDesign.getValuesExceptNone().size() && tileEntity instanceof RollingStationTile) {
-			((RollingStationTile) this.tileEntity).setSelectedWallpaperDesign(WallpaperDesign.getValuesExceptNone().get(id));
+	public boolean enchantItem(@NotNull PlayerEntity playerIn, int id) {
+		if (id >= 0 && id < WallpaperDesign.getValuesExceptNone().size() && tileEntity instanceof PastingTableTile) {
+			((PastingTableTile) this.tileEntity).setSelectedWallpaperDesign(WallpaperDesign.getValuesExceptNone().get(id));
 			return true;
 		} else {
 			return false;
@@ -116,20 +116,20 @@ public class RollingStationContainer extends BaseContainer {
 	}
 
 	public WallpaperDesign getSelectedWallpaperDesign() {
-		return ((RollingStationTile) this.tileEntity).getSelectedWallpaperDesign();
+		return ((PastingTableTile) this.tileEntity).getSelectedWallpaperDesign();
 	}
 
 	@Override
-	public void onContainerClosed(PlayerEntity playerIn) {
-		if (tileEntity != null && tileEntity instanceof RollingStationTile) {
-			((RollingStationTile) tileEntity).removeWallpaperChangedListener(this);
+	public void onContainerClosed(@NotNull PlayerEntity playerIn) {
+		if (tileEntity != null && tileEntity instanceof PastingTableTile) {
+			((PastingTableTile) tileEntity).removeWallpaperChangedListener(this);
 		}
 		super.onContainerClosed(playerIn);
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity playerIn) {
-		return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()), playerEntity, Registration.ROLLING_STATION_BLOCK.get());
+	public boolean canInteractWith(@NotNull PlayerEntity playerIn) {
+		return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()), playerEntity, Registration.PASTING_TABLE_BLOCK.get());
 	}
 
 	@OnlyIn(Dist.CLIENT)

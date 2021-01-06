@@ -29,9 +29,9 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class RollingStationBlock extends Block {
+public class PastingTableBlock extends Block {
 
-	public RollingStationBlock() {
+	public PastingTableBlock() {
 		super(Properties.create(Material.WOOD)
 				.hardnessAndResistance(2.5F)
 				.sound(SoundType.WOOD));
@@ -40,7 +40,7 @@ public class RollingStationBlock extends Block {
 	@Nullable
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		return new RollingStationTile();
+		return new PastingTableTile();
 	}
 
 	@Override
@@ -54,8 +54,8 @@ public class RollingStationBlock extends Block {
 	public ActionResultType onBlockActivated(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult trace) {
 		if (!world.isRemote) {
 			TileEntity tileEntity = world.getTileEntity(pos);
-			if (tileEntity instanceof RollingStationTile) {
-				RollingStationTile presentTile = ((RollingStationTile) tileEntity);
+			if (tileEntity instanceof PastingTableTile) {
+				PastingTableTile presentTile = ((PastingTableTile) tileEntity);
 				presentTile.setWorldAndPos(world, pos);
 				INamedContainerProvider containerProvider = new INamedContainerProvider() {
 					@Override
@@ -64,8 +64,8 @@ public class RollingStationBlock extends Block {
 					}
 
 					@Override
-					public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-						return new RollingStationContainer(i, world, pos, playerInventory, playerEntity);
+					public Container createMenu(int i, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
+						return new PastingTableContainer(i, world, pos, playerInventory, playerEntity);
 					}
 				};
 				NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, tileEntity.getPos());
@@ -76,8 +76,10 @@ public class RollingStationBlock extends Block {
 		return ActionResultType.SUCCESS;
 	}
 
+	@SuppressWarnings("deprecation")
+	@NotNull
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+	public VoxelShape getShape(@NotNull BlockState state, @NotNull IBlockReader worldIn, @NotNull BlockPos pos, @NotNull ISelectionContext context) {
 		VoxelShape shape = Block.makeCuboidShape(0, 10, 0, 16, 11, 16);
 		shape = VoxelShapes.combineAndSimplify(shape, Block.makeCuboidShape(1, 0, 1, 3, 10, 3), IBooleanFunction.OR);
 		shape = VoxelShapes.combineAndSimplify(shape, Block.makeCuboidShape(1, 0, 13, 3, 10, 15), IBooleanFunction.OR);

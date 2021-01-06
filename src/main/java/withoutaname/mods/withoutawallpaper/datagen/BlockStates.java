@@ -15,9 +15,10 @@ public class BlockStates extends BlockStateProvider {
 	@Override
 	protected void registerStatesAndModels() {
 		simpleBlock(Registration.WALLPAPER_BLOCK.get(), models().getExistingFile(modLoc("block/wallpaper")));
+		itemModels().withExistingParent("wallpaper", modLoc("block/wallpaper"));
 
-		horizontalBlock(Registration.ROLLING_STATION_BLOCK.get(), models().getExistingFile(modLoc("block/rolling_station")));
-		itemModels().withExistingParent("rolling_station", modLoc("block/rolling_station"));
+		horizontalBlock(Registration.PASTING_TABLE_BLOCK.get(), models().getExistingFile(modLoc("block/pasting_table")));
+		itemModels().withExistingParent("pasting_table", modLoc("block/pasting_table"));
 	}
 
 }

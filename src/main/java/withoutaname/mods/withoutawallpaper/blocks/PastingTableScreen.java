@@ -13,7 +13,7 @@ import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
 @OnlyIn(Dist.CLIENT)
-public class RollingStationScreen extends BaseScreen<RollingStationContainer> {
+public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
 
 	private final int rowsCount = (int) Math.ceil((double) WallpaperDesign.getValuesExceptNone().size() / 2.0d);
 	private int selectedRow = 0;
@@ -21,7 +21,7 @@ public class RollingStationScreen extends BaseScreen<RollingStationContainer> {
 	private final boolean scrollable = rowsCount > 3;
 	private boolean isScrolling = false;
 
-	public RollingStationScreen(RollingStationContainer container, PlayerInventory playerInventory, ITextComponent title) {
+	public PastingTableScreen(PastingTableContainer container, PlayerInventory playerInventory, ITextComponent title) {
 		super(container, new ResourceLocation(WithoutAWallpaper.MODID, "textures/gui/container/rolling_station.png"), playerInventory, title, 176, 177);
 	}
 
@@ -82,7 +82,7 @@ public class RollingStationScreen extends BaseScreen<RollingStationContainer> {
 			}
 		}
 
-		i = this.guiLeft + 41;
+		i = this.guiLeft + 52;
 		j = this.guiTop + 41;
 		if (container.getOutputSlot().getHasStack()) {
 			WallpaperType wallpaperType = WallpaperType.fromNBT(container.getOutputSlot().getStack().getTag().getCompound("wallpaperType"));
@@ -111,6 +111,7 @@ public class RollingStationScreen extends BaseScreen<RollingStationContainer> {
 		j = this.guiTop + 17;
 		if (mouseX >= (double)i && mouseX < (double)(i + 12) && mouseY >= (double)j && mouseY < (double)(j + 70)) {
 			this.isScrolling = true;
+			mouseDragged(mouseX, mouseY, button, mouseX, mouseY);
 		}
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
