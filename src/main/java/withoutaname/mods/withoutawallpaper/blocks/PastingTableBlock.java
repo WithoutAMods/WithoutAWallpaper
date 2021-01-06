@@ -60,7 +60,7 @@ public class PastingTableBlock extends Block {
 				INamedContainerProvider containerProvider = new INamedContainerProvider() {
 					@Override
 					public ITextComponent getDisplayName() {
-						return new TranslationTextComponent("screen.withoutawallpaper.rolling_station");
+						return new TranslationTextComponent("screen.withoutawallpaper.pasting_table");
 					}
 
 					@Override

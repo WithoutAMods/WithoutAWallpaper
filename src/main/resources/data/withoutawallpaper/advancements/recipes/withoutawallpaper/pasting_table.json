@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "withoutawallpaper:rolling_station"
+      "withoutawallpaper:pasting_table"
     ]
   },
   "criteria": {
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "withoutawallpaper:rolling_station"
+        "recipe": "withoutawallpaper:pasting_table"
       }
     }
   },
