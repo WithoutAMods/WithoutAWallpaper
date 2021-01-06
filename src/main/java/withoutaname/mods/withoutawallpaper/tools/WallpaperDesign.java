@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 public enum WallpaperDesign {
 	NONE("none"),
-	ORANGE("orange", new Colors().addOrange()),
-	WALLPAPER1("wallpaper1", new Colors().addAll(), new Colors().addAll());
+	WALLPAPER_DESIGN_0("wallpaper0", new Colors().addOrange()),
+	WALLPAPER_DESIGN_1("wallpaper1", new Colors().addAll(), new Colors().addAll());
 
 	private final String name;
 	private final Colors[] availableColors;
