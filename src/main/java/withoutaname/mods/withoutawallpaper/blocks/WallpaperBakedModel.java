@@ -4,24 +4,24 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import withoutaname.mods.withoutalib.blocks.BaseBakedModel;
+import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
 import java.util.*;
 
 public class WallpaperBakedModel extends BaseBakedModel {
+
+	public static final ResourceLocation PARTICLE_TEXTURE = new ResourceLocation(WithoutAWallpaper.MODID, "block/wallpaper/" + WallpaperDesign.WALLPAPER_DESIGN_1.toString() + "/design");
 
 	@NotNull
 	@Override
@@ -70,8 +70,7 @@ public class WallpaperBakedModel extends BaseBakedModel {
 	@NotNull
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
-		ResourceLocation resourceLocation = WallpaperDesign.getValuesExceptNone().get(0).getTextures().get(0);
-		return Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(resourceLocation);
+		return Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(PARTICLE_TEXTURE);
 	}
 
 	@Override
