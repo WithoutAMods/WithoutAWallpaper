@@ -40,8 +40,7 @@ public class WallpaperType {
 	}
 
 	public CompoundNBT toNBT() {
-		CompoundNBT wallpaperTypeNBT;
-		wallpaperTypeNBT = new CompoundNBT();
+		CompoundNBT wallpaperTypeNBT = new CompoundNBT();
 		wallpaperTypeNBT.putString("design", design.toString());
 		int[] colorIDs = new int[colors.length];
 		for (int i = 0; i < colors.length; i++) {
