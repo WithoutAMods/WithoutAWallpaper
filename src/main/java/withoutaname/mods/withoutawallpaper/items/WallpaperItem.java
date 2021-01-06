@@ -7,6 +7,7 @@ import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +19,7 @@ import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 public class WallpaperItem extends Item {
 
 	public WallpaperItem() {
-		super(ModSetup.defaultItemProperties.setISTER(() -> WallpaperItemStackRenderer::new));
+		super(new Item.Properties().setISTER(() -> WallpaperItemStackRenderer::new));
 	}
 
 	@NotNull
@@ -30,16 +31,19 @@ public class WallpaperItem extends Item {
 			ItemStack stack = context.getItem();
 			CompoundNBT compoundNBT = stack.getOrCreateTag();
 			if (compoundNBT.contains("wallpaperType")) {
+				BlockState state = world.getBlockState(pos);
+				if (state.getBlock() != Registration.WALLPAPER_BLOCK.get()) {
+					state = Registration.WALLPAPER_BLOCK.get().getDefaultState();
+				}
 				if (!world.isRemote) {
 					Direction face = context.getFace().getOpposite();
-					BlockState state = world.getBlockState(pos);
-					if (state.getBlock() != Registration.WALLPAPER_BLOCK.get()) {
-						state = Registration.WALLPAPER_BLOCK.get().getDefaultState();
-					}
 					world.setBlockState(pos, state);
 					WallpaperTile te = (WallpaperTile) world.getTileEntity(pos);
 					te.setType(face, WallpaperType.fromNBT(compoundNBT.getCompound("wallpaperType")));
 					context.getItem().shrink(1);
+				} else {
+					context.getPlayer().playSound(Registration.WALLPAPER_BLOCK.get().getSoundType(state, world, pos, context.getPlayer()).getPlaceSound()
+							, 1.0f, 1.0f);
 				}
 				return ActionResultType.SUCCESS;
 			}
