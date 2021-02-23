@@ -27,7 +27,6 @@ public class PastingTableContainer extends BaseContainer {
 	private TileEntity tileEntity;
 	private PlayerEntity playerEntity;
 	private IItemHandler playerInventory;
-	private final IntReferenceHolder selectedDesign = IntReferenceHolder.single();
 	private Slot paperSlot;
 	private Slot dyeSlot0;
 	private Slot dyeSlot1;
@@ -77,14 +76,12 @@ public class PastingTableContainer extends BaseContainer {
 				trackInt(new IntReferenceHolder() {
 					@Override
 					public int get() {
-						return rollingStationTile.getSelectedWallpaperDesign().ordinal();
+						return rollingStationTile.getSelectedWallpaperDesign().toInt();
 					}
 
 					@Override
 					public void set(int value) {
-						if (value >= 0 && value < WallpaperDesign.values().length){
-							rollingStationTile.setSelectedWallpaperDesign(WallpaperDesign.values()[value]);
-						}
+						rollingStationTile.setSelectedWallpaperDesign(WallpaperDesign.fromInt(value));
 					}
 				});
 				rollingStationTile.addWallpaperChangedListener(this, this::updateOutput);

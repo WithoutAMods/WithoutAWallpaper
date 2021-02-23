@@ -1,13 +1,36 @@
 package withoutaname.mods.withoutawallpaper.tools;
 
 import net.minecraft.item.DyeColor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Colors {
 
+	public static final Logger LOGGER = LogManager.getLogger();
+
 	private List<DyeColor> colors = new ArrayList<>();
+
+	public Colors() {
+	}
+
+	public Colors(String colors) {
+		for (String color : colors.split(",")) {
+			if (color.equals("all")) {
+				addAll();
+				break;
+			} else {
+				DyeColor dyeColor = DyeColor.byTranslationKey(color, null);
+				if (dyeColor != null) {
+					this.colors.add(dyeColor);
+				} else {
+					LOGGER.error("Color \"" + color + "\" does not exist.");
+				}
+			}
+		}
+	}
 
 	public List<DyeColor> getColors() {
 		return colors;

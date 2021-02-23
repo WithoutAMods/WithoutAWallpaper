@@ -36,7 +36,15 @@ public class WallpaperType {
 		for (int colorID : wallpaperTypeNBT.getIntArray("colors")) {
 			colors.add(DyeColor.byId(colorID));
 		}
-		return new WallpaperType(WallpaperDesign.fromString(wallpaperTypeNBT.getString("design")), colors);
+		try {
+			return new WallpaperType(WallpaperDesign.fromString(wallpaperTypeNBT.getString("design")), colors);
+		} catch (IllegalArgumentException e) {
+			Colors[] availableColors = new Colors[colors.size()];
+			for (int i = 0; i < colors.size(); i++) {
+				availableColors[i] = new Colors().add(colors.get(i));
+			}
+			return new WallpaperType(new WallpaperDesign(wallpaperTypeNBT.getString("design"), availableColors), colors);
+		}
 	}
 
 	public CompoundNBT toNBT() {

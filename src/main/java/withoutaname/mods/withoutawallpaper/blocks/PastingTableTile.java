@@ -138,7 +138,11 @@ public class PastingTableTile extends TileEntity {
 
 	private void readData(CompoundNBT nbt) {
 		itemHandler.deserializeNBT(nbt.getCompound("inv"));
-		selectedWallpaperDesign = WallpaperDesign.fromString(nbt.getString("selectedDesign"));
+		try {
+			selectedWallpaperDesign = WallpaperDesign.fromString(nbt.getString("selectedDesign"));
+		} catch (IllegalArgumentException e) { // If custom WallpaperDesign was removed from world
+			selectedWallpaperDesign = WallpaperDesign.NONE;
+		}
 		updateWallpaper();
 	}
 
