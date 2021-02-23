@@ -69,7 +69,12 @@ public class ClientSetup {
 			resourcePackList.addPackFinder((infoConsumer, infoFactory) ->
 			{
 				ResourcePackInfo packInfo = ResourcePackInfo.createResourcePack("CustomWallpaperResources", true,
-						() -> new FolderPack(packPath.toFile()), infoFactory, ResourcePackInfo.Priority.TOP, IPackNameDecorator.PLAIN);
+						() -> new FolderPack(packPath.toFile()) {
+							@Override
+							public boolean isHidden() {
+								return true;
+							}
+						}, infoFactory, ResourcePackInfo.Priority.TOP, IPackNameDecorator.PLAIN);
 				if (packInfo != null) {
 					infoConsumer.accept(packInfo);
 				} else {
