@@ -14,14 +14,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import withoutaname.mods.withoutalib.blocks.BaseBakedModel;
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
-import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
 import java.util.*;
 
 public class WallpaperBakedModel extends BaseBakedModel {
 
-	public static final ResourceLocation PARTICLE_TEXTURE = new ResourceLocation(WithoutAWallpaper.MODID, "block/wallpaper/" + WallpaperDesign.WALLPAPER_DESIGN_1.toString() + "/design");
+	public static final ResourceLocation PARTICLE_TEXTURE = new ResourceLocation(WithoutAWallpaper.MODID, "block/wallpaper/particles");
 
 	@NotNull
 	@Override
