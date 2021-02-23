@@ -102,7 +102,7 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
 		int j = this.guiTop + 17;
 
 		if (mouseX >= (double) i && mouseX < (double) (i + 42) && mouseY >= (double) j && mouseY < (double) (j + 70)) {
-			int id = this.selectedRow * 3 + ((int) ((mouseX - i) / 21)) + ((int) ((mouseY - j) / 21)) * 3;
+			int id = this.selectedRow * 2 + ((int) ((mouseX - i) / 21)) + ((int) ((mouseY - j) / 21)) * 2;
 			this.minecraft.playerController.sendEnchantPacket((this.container).windowId, id);
 			return true;
 		}
@@ -111,7 +111,7 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
 		j = this.guiTop + 17;
 		if (mouseX >= (double)i && mouseX < (double)(i + 12) && mouseY >= (double)j && mouseY < (double)(j + 70)) {
 			this.isScrolling = true;
-			mouseDragged(mouseX, mouseY, button, mouseX, mouseY);
+			mouseDragged(mouseX, mouseY, button, 0, 0);
 		}
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
@@ -119,14 +119,14 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
 	@Override
 	public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
 		if (this.isScrolling && this.scrollable) {
-			double y = dragY - this.guiTop - 24.5d;
+			double y = mouseY + dragY - this.guiTop - 24.5d;
 			if (y < 0d) {
 				y = 0d;
 			} else if (y > 48d) {
 				y = 48d;
 			}
 			this.scrolledY = (int) Math.round(y);
-			this.selectedRow = (int) Math.round(y / 48d * (double) (rowsCount - 5));
+			this.selectedRow = (int) Math.round(y / 48d * (double) (rowsCount - 3));
 			return true;
 		} else {
 			return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
@@ -136,7 +136,7 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
 	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
 		if (this.scrollable) {
-			while (delta < 0 && this.selectedRow < this.rowsCount - 5) {
+			while (delta < 0 && this.selectedRow < this.rowsCount - 3) {
 				this.selectedRow++;
 				delta++;
 			}
@@ -144,7 +144,7 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
 				this.selectedRow--;
 				delta--;
 			}
-			this.scrolledY = (int) Math.round((double) this.selectedRow / (double) (rowsCount - 5) * 48d);
+			this.scrolledY = (int) Math.round((double) this.selectedRow / (double) (rowsCount - 3) * 48d);
 		}
 
 		return true;
