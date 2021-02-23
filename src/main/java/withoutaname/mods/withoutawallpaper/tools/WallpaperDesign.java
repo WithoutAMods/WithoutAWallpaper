@@ -40,7 +40,7 @@ public class WallpaperDesign {
 						availableColors[i] = new Colors(availableColorsString[i]);
 					}
 					designs.add(new WallpaperDesign(designStringSplit[0], availableColors));
-					LOGGER.info("Successfully loaded design \"" + designStringSplit[0] + "\".");
+					LOGGER.debug("Successfully loaded design \"" + designStringSplit[0] + "\".");
 				} else {
 					LOGGER.error("Error loading design \"" + designStringSplit[0] + "\". Only three colors are allowed!");
 				}

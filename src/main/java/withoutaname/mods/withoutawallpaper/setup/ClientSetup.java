@@ -11,7 +11,6 @@ import net.minecraft.resources.ResourcePackInfo;
 import net.minecraft.resources.ResourcePackList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -34,7 +33,6 @@ import java.util.List;
 import static withoutaname.mods.withoutawallpaper.blocks.PastingTableRenderer.DYES_TEXTURE;
 import static withoutaname.mods.withoutawallpaper.blocks.WallpaperBakedModel.PARTICLE_TEXTURE;
 
-@OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = WithoutAWallpaper.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
 
@@ -62,7 +60,7 @@ public class ClientSetup {
 	}
 
 	public static void registerResourcePack() {
-		Path packPath = Minecraft.getInstance().gameDir.toPath().resolveSibling("config").resolve("withoutawallpaper").resolve("CustomWallpaperResources");
+		Path packPath = Minecraft.getInstance().gameDir.toPath().resolve("config").resolve("withoutawallpaper").resolve("CustomWallpaperResources");
 		try {
 			createEmptyPack(packPath);
 			ResourcePackList resourcePackList = Minecraft.getInstance().getResourcePackList();
@@ -91,6 +89,7 @@ public class ClientSetup {
 		Path packAssetsPath = packPath.resolve("assets").resolve("withoutawallpaper").resolve("textures").resolve("block").resolve("wallpaper");
 		if (!Files.exists(packAssetsPath)) {
 			Files.createDirectories(packAssetsPath);
+			LOGGER.debug("Created custom wallpaper resource folder: " + packPath.toString());
 		}
 		Path packInfoPath = packPath.resolve("pack.mcmeta");
 		if (!Files.exists(packInfoPath)) {
@@ -103,6 +102,7 @@ public class ClientSetup {
 			mcMetaFile.add("    }");
 			mcMetaFile.add("}");
 			Files.write(packInfoPath, mcMetaFile);
+			LOGGER.debug("Created pack.mcmeta for custom wallpaper resource pack: " + packInfoPath.toString());
 		}
 	}
 
