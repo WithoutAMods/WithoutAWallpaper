@@ -22,7 +22,7 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
 	private boolean isScrolling = false;
 
 	public PastingTableScreen(PastingTableContainer container, PlayerInventory playerInventory, ITextComponent title) {
-		super(container, new ResourceLocation(WithoutAWallpaper.MODID, "textures/gui/container/rolling_station.png"), playerInventory, title, 176, 177);
+		super(container, new ResourceLocation(WithoutAWallpaper.MODID, "textures/gui/container/pasting_table.png"), playerInventory, title, 176, 177);
 	}
 
 	@Override

@@ -6,8 +6,8 @@
 		"planks": "block/oak_planks",
 		"brush_hair_side": "block/hay_block_side",
 		"brush_hair_top": "block/hay_block_top",
-		"bucket": "withoutawallpaper:block/rolling_station/bucket",
-		"brush": "withoutawallpaper:block/rolling_station/brush"
+		"bucket": "withoutawallpaper:block/pasting_table/bucket",
+		"brush": "withoutawallpaper:block/pasting_table/brush"
 	},
 	"elements": [
 		{

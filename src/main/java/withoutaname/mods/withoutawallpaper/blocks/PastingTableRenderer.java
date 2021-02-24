@@ -23,7 +23,7 @@ import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
 public class PastingTableRenderer extends TileEntityRenderer<PastingTableTile> {
 
-	public static final ResourceLocation DYES_TEXTURE = new ResourceLocation(WithoutAWallpaper.MODID, "block/rolling_station/dyes");
+	public static final ResourceLocation DYES_TEXTURE = new ResourceLocation(WithoutAWallpaper.MODID, "block/pasting_table/dyes");
 
 	public PastingTableRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
 		super(rendererDispatcherIn);
