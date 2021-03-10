@@ -61,6 +61,6 @@ diffrent textures to the game.
 [[dependencies.withoutawallpaper]]
     modId="withoutalib"
     mandatory=true
-    versionRange="[0.1.2,)"
+    versionRange="[1.16.5-0.1.2,)"
     ordering="NONE"
     side="BOTH"
