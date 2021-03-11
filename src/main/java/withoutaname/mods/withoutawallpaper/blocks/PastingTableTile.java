@@ -52,6 +52,12 @@ public class PastingTableTile extends TileEntity {
 	}
 
 	@Override
+	public void remove() {
+		super.remove();
+		itemHandlerLazyOptional.invalidate();
+	}
+
+	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return new AxisAlignedBB(getPos(), getPos().add(1, 1, 1));
 	}
