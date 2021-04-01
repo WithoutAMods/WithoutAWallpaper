@@ -16,11 +16,12 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
-import org.jetbrains.annotations.NotNull;
 import withoutaname.mods.withoutalib.blocks.BaseContainer;
 import withoutaname.mods.withoutawallpaper.setup.Registration;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
+
+import javax.annotation.Nonnull;
 
 public class PastingTableContainer extends BaseContainer {
 
@@ -47,12 +48,12 @@ public class PastingTableContainer extends BaseContainer {
 			});
 			outputSlot = addSlot(new Slot(new Inventory(1), 0, 12, 60) {
 
-				public boolean isItemValid(@NotNull ItemStack stack) {
+				public boolean isItemValid(@Nonnull ItemStack stack) {
 					return false;
 				}
 
-				@NotNull
-				public ItemStack onTake(@NotNull PlayerEntity thePlayer, @NotNull ItemStack stack) {
+				@Nonnull
+				public ItemStack onTake(@Nonnull PlayerEntity thePlayer, @Nonnull ItemStack stack) {
 					WallpaperType wallpaperType = WallpaperType.fromNBT(stack.getTag().getCompound("wallpaperType"));
 
 					PastingTableContainer.this.paperSlot.decrStackSize(1);
@@ -103,7 +104,7 @@ public class PastingTableContainer extends BaseContainer {
 	}
 
 	@Override
-	public boolean enchantItem(@NotNull PlayerEntity playerIn, int id) {
+	public boolean enchantItem(@Nonnull PlayerEntity playerIn, int id) {
 		if (id >= 0 && id < WallpaperDesign.getValuesExceptNone().size() && tileEntity instanceof PastingTableTile) {
 			((PastingTableTile) this.tileEntity).setSelectedWallpaperDesign(WallpaperDesign.getValuesExceptNone().get(id));
 			return true;
@@ -117,7 +118,7 @@ public class PastingTableContainer extends BaseContainer {
 	}
 
 	@Override
-	public void onContainerClosed(@NotNull PlayerEntity playerIn) {
+	public void onContainerClosed(@Nonnull PlayerEntity playerIn) {
 		if (tileEntity != null && tileEntity instanceof PastingTableTile) {
 			((PastingTableTile) tileEntity).removeWallpaperChangedListener(this);
 		}
@@ -125,7 +126,7 @@ public class PastingTableContainer extends BaseContainer {
 	}
 
 	@Override
-	public boolean canInteractWith(@NotNull PlayerEntity playerIn) {
+	public boolean canInteractWith(@Nonnull PlayerEntity playerIn) {
 		return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()), playerEntity, Registration.PASTING_TABLE_BLOCK.get());
 	}
 

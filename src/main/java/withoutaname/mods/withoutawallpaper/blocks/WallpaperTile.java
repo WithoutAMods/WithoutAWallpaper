@@ -11,11 +11,11 @@ import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.util.Constants;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import withoutaname.mods.withoutawallpaper.setup.Registration;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 
 public class WallpaperTile extends TileEntity {
@@ -51,7 +51,7 @@ public class WallpaperTile extends TileEntity {
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public CompoundNBT getUpdateTag() {
 		CompoundNBT tag = super.getUpdateTag();
@@ -75,7 +75,7 @@ public class WallpaperTile extends TileEntity {
 		handleUpdateTag(getBlockState(), pkt.getNbtCompound());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public IModelData getModelData() {
 		return new ModelDataMap.Builder()
@@ -84,7 +84,7 @@ public class WallpaperTile extends TileEntity {
 	}
 
 	@Override
-	public void read(@NotNull BlockState state, CompoundNBT nbt) {
+	public void read(@Nonnull BlockState state, CompoundNBT nbt) {
 		super.read(state, nbt);
 		readDesigns(nbt);
 	}
@@ -98,9 +98,9 @@ public class WallpaperTile extends TileEntity {
 		update();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public CompoundNBT write(@NotNull CompoundNBT nbt) {
+	public CompoundNBT write(@Nonnull CompoundNBT nbt) {
 		writeDesigns(nbt);
 		return super.write(nbt);
 	}

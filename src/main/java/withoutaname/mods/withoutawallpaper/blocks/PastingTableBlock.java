@@ -26,8 +26,9 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class PastingTableBlock extends Block {
 
@@ -50,8 +51,8 @@ public class PastingTableBlock extends Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	@NotNull
-	public ActionResultType onBlockActivated(@NotNull BlockState state, World world, @NotNull BlockPos pos, @NotNull PlayerEntity player, @NotNull Hand hand, @NotNull BlockRayTraceResult trace) {
+	@Nonnull
+	public ActionResultType onBlockActivated(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult trace) {
 		if (!world.isRemote) {
 			TileEntity tileEntity = world.getTileEntity(pos);
 			if (tileEntity instanceof PastingTableTile) {
@@ -64,7 +65,7 @@ public class PastingTableBlock extends Block {
 					}
 
 					@Override
-					public Container createMenu(int i, @NotNull PlayerInventory playerInventory, @NotNull PlayerEntity playerEntity) {
+					public Container createMenu(int i, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
 						return new PastingTableContainer(i, world, pos, playerInventory, playerEntity);
 					}
 				};
@@ -77,9 +78,9 @@ public class PastingTableBlock extends Block {
 	}
 
 	@SuppressWarnings("deprecation")
-	@NotNull
+	@Nonnull
 	@Override
-	public VoxelShape getShape(@NotNull BlockState state, @NotNull IBlockReader worldIn, @NotNull BlockPos pos, @NotNull ISelectionContext context) {
+	public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader worldIn, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
 		VoxelShape shape = Block.makeCuboidShape(0, 10, 0, 16, 11, 16);
 		shape = VoxelShapes.combineAndSimplify(shape, Block.makeCuboidShape(1, 0, 1, 3, 10, 3), IBooleanFunction.OR);
 		shape = VoxelShapes.combineAndSimplify(shape, Block.makeCuboidShape(1, 0, 13, 3, 10, 15), IBooleanFunction.OR);

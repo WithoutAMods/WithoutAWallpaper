@@ -15,11 +15,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import org.jetbrains.annotations.NotNull;
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
 import withoutaname.mods.withoutawallpaper.setup.Registration;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
+
+import javax.annotation.Nonnull;
 
 public class PastingTableRenderer extends TileEntityRenderer<PastingTableTile> {
 
@@ -43,7 +44,7 @@ public class PastingTableRenderer extends TileEntityRenderer<PastingTableTile> {
 	}
 
 	@Override
-	public void render(PastingTableTile tileEntityIn, float partialTicks, MatrixStack matrixStackIn, @NotNull IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+	public void render(PastingTableTile tileEntityIn, float partialTicks, MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		matrixStackIn.push();
 		Quaternion rotation;
 				switch (tileEntityIn.getBlockState().get(BlockStateProperties.HORIZONTAL_FACING)) {

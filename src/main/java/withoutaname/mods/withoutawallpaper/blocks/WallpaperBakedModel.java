@@ -10,21 +10,21 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.data.IModelData;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import withoutaname.mods.withoutalib.blocks.BaseBakedModel;
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class WallpaperBakedModel extends BaseBakedModel {
 
 	public static final ResourceLocation PARTICLE_TEXTURE = new ResourceLocation(WithoutAWallpaper.MODID, "block/wallpaper/particles");
 
-	@NotNull
+	@Nonnull
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull Random rand, @NotNull IModelData extraData) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
 		RenderType layer = MinecraftForgeClient.getRenderLayer();
 
 		if (side != null || (layer != null && !layer.equals(RenderType.getTranslucent()))) {
@@ -66,7 +66,7 @@ public class WallpaperBakedModel extends BaseBakedModel {
 		return quads;
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
 		return Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(PARTICLE_TEXTURE);

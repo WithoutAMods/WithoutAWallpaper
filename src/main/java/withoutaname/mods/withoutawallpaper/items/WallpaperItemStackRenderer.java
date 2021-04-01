@@ -10,8 +10,9 @@ import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.vector.Quaternion;
-import org.jetbrains.annotations.NotNull;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
+
+import javax.annotation.Nonnull;
 
 public class WallpaperItemStackRenderer extends ItemStackTileEntityRenderer {
 
@@ -25,7 +26,7 @@ public class WallpaperItemStackRenderer extends ItemStackTileEntityRenderer {
 	}
 
 	@Override
-	public void func_239207_a_(ItemStack stack, @NotNull ItemCameraTransforms.TransformType p_239207_2_, @NotNull MatrixStack matrixStack, @NotNull IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
+	public void func_239207_a_(ItemStack stack, @Nonnull ItemCameraTransforms.TransformType p_239207_2_, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
 		WallpaperType wallpaperType = WallpaperType.NONE;
 		if (stack.hasTag()) {
 			CompoundNBT tag = stack.getTag();

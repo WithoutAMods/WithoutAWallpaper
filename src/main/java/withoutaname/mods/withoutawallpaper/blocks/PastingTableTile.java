@@ -16,12 +16,12 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import withoutaname.mods.withoutawallpaper.setup.Registration;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,9 +42,9 @@ public class PastingTableTile extends TileEntity {
 		super(Registration.PASTING_TABLE_TILE.get());
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
 		if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return itemHandlerLazyOptional.cast();
 		}
@@ -111,7 +111,7 @@ public class PastingTableTile extends TileEntity {
 		}
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
 	public CompoundNBT getUpdateTag() {
 		CompoundNBT tag = super.getUpdateTag();
@@ -136,7 +136,7 @@ public class PastingTableTile extends TileEntity {
 	}
 
 	@Override
-	public void read(@NotNull BlockState state, @NotNull CompoundNBT nbt) {
+	public void read(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
 		readData(nbt);
 		super.read(state, nbt);
 		update();
@@ -152,9 +152,9 @@ public class PastingTableTile extends TileEntity {
 		updateWallpaper();
 	}
 
-	@NotNull
+	@Nonnull
 	@Override
-	public CompoundNBT write(@NotNull CompoundNBT nbt) {
+	public CompoundNBT write(@Nonnull CompoundNBT nbt) {
 		writeData(nbt);
 
 		return super.write(nbt);
@@ -168,9 +168,9 @@ public class PastingTableTile extends TileEntity {
 	private ItemStackHandler createInputHandler() {
 		return new ItemStackHandler(4) {
 
-			@NotNull
+			@Nonnull
 			@Override
-			public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+			public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
 				if (!isItemValid(slot, stack)) {
 					return stack;
 				}
@@ -178,7 +178,7 @@ public class PastingTableTile extends TileEntity {
 			}
 
 			@Override
-			public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+			public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
 				if (slot == 0) {
 					return stack.getItem() == Items.PAPER;
 				} else if (slot <= selectedWallpaperDesign.getColorCount()) {

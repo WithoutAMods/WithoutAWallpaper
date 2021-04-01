@@ -20,12 +20,12 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import withoutaname.mods.withoutawallpaper.setup.Registration;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,16 +83,16 @@ public class WallpaperBlock extends Block {
 	}
 
 	@SuppressWarnings("deprecation")
-	@NotNull
+	@Nonnull
 	@Override
-	public PushReaction getPushReaction(@NotNull BlockState state) {
+	public PushReaction getPushReaction(@Nonnull BlockState state) {
 		return PushReaction.DESTROY;
 	}
 
 	@SuppressWarnings("deprecation")
-	@NotNull
+	@Nonnull
 	@Override
-	public VoxelShape getShape(@NotNull BlockState state, IBlockReader worldIn, @NotNull BlockPos pos, @NotNull ISelectionContext context) {
+	public VoxelShape getShape(@Nonnull BlockState state, IBlockReader worldIn, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
 		List<VoxelShape> shapeList = new ArrayList<>();
 
 		TileEntity te = worldIn.getTileEntity(pos);
