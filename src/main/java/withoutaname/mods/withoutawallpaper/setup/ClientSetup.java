@@ -42,7 +42,7 @@ public class ClientSetup {
 		ScreenManager.registerFactory(Registration.PASTING_TABLE_CONTAINER.get(), PastingTableScreen::new);
 		PastingTableRenderer.register();
 
-		event.enqueueWork(() -> RenderTypeLookup.setRenderLayer(Registration.WALLPAPER_BLOCK.get(), (renderType) -> renderType.equals(RenderType.getTranslucent())));
+		event.enqueueWork(() -> RenderTypeLookup.setRenderLayer(Registration.WALLPAPER_BLOCK.get(), RenderType.getTranslucent()));
 	}
 
 	@SubscribeEvent
