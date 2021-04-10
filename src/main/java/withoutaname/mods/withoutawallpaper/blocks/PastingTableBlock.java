@@ -30,11 +30,13 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class PastingTableBlock extends Block {
 
 	public PastingTableBlock() {
-		super(Properties.create(Material.WOOD)
-				.hardnessAndResistance(2.5F)
+		super(Properties.of(Material.WOOD)
+				.strength(2.5F)
 				.sound(SoundType.WOOD));
 	}
 
@@ -52,12 +54,12 @@ public class PastingTableBlock extends Block {
 	@SuppressWarnings("deprecation")
 	@Override
 	@Nonnull
-	public ActionResultType onBlockActivated(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult trace) {
-		if (!world.isRemote) {
-			TileEntity tileEntity = world.getTileEntity(pos);
+	public ActionResultType use(@Nonnull BlockState state, World world, @Nonnull BlockPos pos, @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult trace) {
+		if (!world.isClientSide) {
+			TileEntity tileEntity = world.getBlockEntity(pos);
 			if (tileEntity instanceof PastingTableTile) {
 				PastingTableTile presentTile = ((PastingTableTile) tileEntity);
-				presentTile.setWorldAndPos(world, pos);
+				presentTile.setLevelAndPosition(world, pos);
 				INamedContainerProvider containerProvider = new INamedContainerProvider() {
 					@Override
 					public ITextComponent getDisplayName() {
@@ -69,7 +71,7 @@ public class PastingTableBlock extends Block {
 						return new PastingTableContainer(i, world, pos, playerInventory, playerEntity);
 					}
 				};
-				NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, tileEntity.getPos());
+				NetworkHooks.openGui((ServerPlayerEntity) player, containerProvider, tileEntity.getBlockPos());
 			} else {
 				throw new IllegalStateException("No tile entity found!");
 			}
@@ -81,22 +83,22 @@ public class PastingTableBlock extends Block {
 	@Nonnull
 	@Override
 	public VoxelShape getShape(@Nonnull BlockState state, @Nonnull IBlockReader worldIn, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
-		VoxelShape shape = Block.makeCuboidShape(0, 10, 0, 16, 11, 16);
-		shape = VoxelShapes.combineAndSimplify(shape, Block.makeCuboidShape(1, 0, 1, 3, 10, 3), IBooleanFunction.OR);
-		shape = VoxelShapes.combineAndSimplify(shape, Block.makeCuboidShape(1, 0, 13, 3, 10, 15), IBooleanFunction.OR);
-		shape = VoxelShapes.combineAndSimplify(shape, Block.makeCuboidShape(13, 0, 13, 15, 10, 15), IBooleanFunction.OR);
-		shape = VoxelShapes.combineAndSimplify(shape, Block.makeCuboidShape(13, 0, 1, 15, 10, 3), IBooleanFunction.OR);
+		VoxelShape shape = Block.box(0, 10, 0, 16, 11, 16);
+		shape = VoxelShapes.join(shape, Block.box(1, 0, 1, 3, 10, 3), IBooleanFunction.OR);
+		shape = VoxelShapes.join(shape, Block.box(1, 0, 13, 3, 10, 15), IBooleanFunction.OR);
+		shape = VoxelShapes.join(shape, Block.box(13, 0, 13, 15, 10, 15), IBooleanFunction.OR);
+		shape = VoxelShapes.join(shape, Block.box(13, 0, 1, 15, 10, 3), IBooleanFunction.OR);
 		return shape;
 	}
 
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, context.getPlacementHorizontalFacing());
+		return defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, context.getHorizontalDirection());
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(BlockStateProperties.HORIZONTAL_FACING);
 	}
 

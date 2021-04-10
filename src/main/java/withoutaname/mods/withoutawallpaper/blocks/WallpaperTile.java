@@ -41,13 +41,13 @@ public class WallpaperTile extends TileEntity {
 	}
 
 	public void update() {
-		if (world != null) {
-			if (world.isRemote()) {
+		if (level != null) {
+			if (level.isClientSide()) {
 				ModelDataManager.requestModelDataRefresh(this);
 			} else {
-				markDirty();
+				setChanged();
 			}
-			world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
 		}
 	}
 
@@ -67,12 +67,12 @@ public class WallpaperTile extends TileEntity {
 	@Nullable
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+		return new SUpdateTileEntityPacket(worldPosition, 1, getUpdateTag());
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		handleUpdateTag(getBlockState(), pkt.getNbtCompound());
+		handleUpdateTag(getBlockState(), pkt.getTag());
 	}
 
 	@Nonnull
@@ -84,8 +84,8 @@ public class WallpaperTile extends TileEntity {
 	}
 
 	@Override
-	public void read(@Nonnull BlockState state, CompoundNBT nbt) {
-		super.read(state, nbt);
+	public void load(@Nonnull BlockState state, CompoundNBT nbt) {
+		super.load(state, nbt);
 		readDesigns(nbt);
 	}
 
@@ -100,9 +100,9 @@ public class WallpaperTile extends TileEntity {
 
 	@Nonnull
 	@Override
-	public CompoundNBT write(@Nonnull CompoundNBT nbt) {
+	public CompoundNBT save(@Nonnull CompoundNBT nbt) {
 		writeDesigns(nbt);
-		return super.write(nbt);
+		return super.save(nbt);
 	}
 
 	private void writeDesigns(CompoundNBT nbt) {

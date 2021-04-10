@@ -21,7 +21,7 @@ public class Recipes extends RecipeProvider{
 	}
 
 	@Override
-	protected void registerRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
+	protected void buildShapelessRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
 		/*
 		Not possible to generate criterion with tag (manually added)
 

@@ -25,12 +25,12 @@ public class WallpaperModelGeometry implements IModelGeometry<WallpaperModelGeom
 
 	@Override
 	public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function modelGetter, Set missingTextureErrors) {
-		Collection<ResourceLocation> allResourceLocations = Minecraft.getInstance().getResourceManager().getAllResourceLocations("textures/block/wallpaper", s -> s.endsWith(".png"));
+		Collection<ResourceLocation> allResourceLocations = Minecraft.getInstance().getResourceManager().listResources("textures/block/wallpaper", s -> s.endsWith(".png"));
 
 		Collection<RenderMaterial> renderMaterials = new ArrayList<>();
 		for (ResourceLocation resourceLocation : allResourceLocations) {
 			resourceLocation = new ResourceLocation(resourceLocation.getNamespace(), resourceLocation.getPath().substring(9, resourceLocation.getPath().length() - 4));
-			renderMaterials.add(new RenderMaterial(AtlasTexture.LOCATION_BLOCKS_TEXTURE, resourceLocation));
+			renderMaterials.add(new RenderMaterial(AtlasTexture.LOCATION_BLOCKS, resourceLocation));
 		}
 		return renderMaterials;
 	}

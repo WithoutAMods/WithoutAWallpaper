@@ -27,20 +27,20 @@ public class LootTables extends BaseLootTableProvider {
 		PastingTableBlock rollingStationBlock = Registration.PASTING_TABLE_BLOCK.get();
 		lootTables.put(rollingStationBlock, getStandardLootTable(getStandardLootPool(rollingStationBlock.toString(),
 				getStandardItemLootEntry(Registration.PASTING_TABLE_ITEM.get())
-						.acceptFunction(CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY)
-								.addOperation("inv", "BlockEntityTag.inv",
+						.apply(CopyNbt.copyData(CopyNbt.Source.BLOCK_ENTITY)
+								.copy("inv", "BlockEntityTag.inv",
 										CopyNbt.Action.REPLACE)
-								.addOperation("selectedDesign", "BlockEntityTag.selectedDesign",
+								.copy("selectedDesign", "BlockEntityTag.selectedDesign",
 										CopyNbt.Action.REPLACE)))));
 
 		Block wallpaperBlock = Registration.WALLPAPER_BLOCK.get();
-		LootTable.Builder lootTable = LootTable.builder()
-				.addLootPool(getWallpaperLootPool(wallpaperBlock, Direction.NORTH))
-				.addLootPool(getWallpaperLootPool(wallpaperBlock, Direction.EAST))
-				.addLootPool(getWallpaperLootPool(wallpaperBlock, Direction.SOUTH))
-				.addLootPool(getWallpaperLootPool(wallpaperBlock, Direction.WEST))
-				.addLootPool(getWallpaperLootPool(wallpaperBlock, Direction.UP))
-				.addLootPool(getWallpaperLootPool(wallpaperBlock, Direction.DOWN));
+		LootTable.Builder lootTable = LootTable.lootTable()
+				.withPool(getWallpaperLootPool(wallpaperBlock, Direction.NORTH))
+				.withPool(getWallpaperLootPool(wallpaperBlock, Direction.EAST))
+				.withPool(getWallpaperLootPool(wallpaperBlock, Direction.SOUTH))
+				.withPool(getWallpaperLootPool(wallpaperBlock, Direction.WEST))
+				.withPool(getWallpaperLootPool(wallpaperBlock, Direction.UP))
+				.withPool(getWallpaperLootPool(wallpaperBlock, Direction.DOWN));
 		lootTables.put(wallpaperBlock, lootTable);
 	}
 
@@ -50,11 +50,11 @@ public class LootTables extends BaseLootTableProvider {
 		wallpaperType.putString("design", WallpaperDesign.NONE.toString());
 		tag.put(direction.toString(), wallpaperType);
 		return getStandardLootPool(block.getRegistryName().toString(), ItemLootEntry
-				.builder(Registration.WALLPAPER_ITEM.get())
-				.acceptFunction(CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY)
-						.addOperation(direction.toString(), "wallpaperType", CopyNbt.Action.REPLACE)))
-				.acceptCondition(Inverted
-						.builder(new NBTCondition.Builder(NBTCondition.Source.BLOCK_ENTITY)
+				.lootTableItem(Registration.WALLPAPER_ITEM.get())
+				.apply(CopyNbt.copyData(CopyNbt.Source.BLOCK_ENTITY)
+						.copy(direction.toString(), "wallpaperType", CopyNbt.Action.REPLACE)))
+				.when(Inverted
+						.invert(new NBTCondition.Builder(NBTCondition.Source.BLOCK_ENTITY)
 								.fromPredicate(new NBTPredicate(tag))));
 	}
 

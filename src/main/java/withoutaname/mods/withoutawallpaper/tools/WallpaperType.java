@@ -89,7 +89,7 @@ public class WallpaperType {
 	public List<TextureAtlasSprite> getAtlasSprites() {
 		List<TextureAtlasSprite> atlasSprites = new ArrayList<>();
 		for (ResourceLocation resourceLocation : getResourceLocations()) {
-			atlasSprites.add(Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(resourceLocation));
+			atlasSprites.add(Minecraft.getInstance().getTextureAtlas(AtlasTexture.LOCATION_BLOCKS).apply(resourceLocation));
 		}
 		return atlasSprites;
 	}

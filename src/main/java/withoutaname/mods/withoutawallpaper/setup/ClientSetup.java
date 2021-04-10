@@ -39,10 +39,10 @@ public class ClientSetup {
 	public static final Logger LOGGER = LogManager.getLogger();
 
 	public static void init(final FMLClientSetupEvent event) {
-		ScreenManager.registerFactory(Registration.PASTING_TABLE_CONTAINER.get(), PastingTableScreen::new);
+		ScreenManager.register(Registration.PASTING_TABLE_CONTAINER.get(), PastingTableScreen::new);
 		PastingTableRenderer.register();
 
-		event.enqueueWork(() -> RenderTypeLookup.setRenderLayer(Registration.WALLPAPER_BLOCK.get(), RenderType.getTranslucent()));
+		event.enqueueWork(() -> RenderTypeLookup.setRenderLayer(Registration.WALLPAPER_BLOCK.get(), RenderType.translucent()));
 	}
 
 	@SubscribeEvent
@@ -52,7 +52,7 @@ public class ClientSetup {
 
 	@SubscribeEvent
 	public static void onTextureStitch(TextureStitchEvent.Pre event) {
-		if (event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
+		if (event.getMap().location().equals(AtlasTexture.LOCATION_BLOCKS)) {
 			event.addSprite(DYES_TEXTURE);
 			event.addSprite(PARTICLE_TEXTURE);
 		}
@@ -60,19 +60,19 @@ public class ClientSetup {
 	}
 
 	public static void registerResourcePack() {
-		Path packPath = Minecraft.getInstance().gameDir.toPath().resolve("config").resolve("withoutawallpaper").resolve("CustomWallpaperResources");
+		Path packPath = Minecraft.getInstance().gameDirectory.toPath().resolve("config").resolve("withoutawallpaper").resolve("CustomWallpaperResources");
 		try {
 			createEmptyPack(packPath);
-			ResourcePackList resourcePackList = Minecraft.getInstance().getResourcePackList();
+			ResourcePackList resourcePackList = Minecraft.getInstance().getResourcePackRepository();
 			resourcePackList.addPackFinder((infoConsumer, infoFactory) ->
 			{
-				ResourcePackInfo packInfo = ResourcePackInfo.createResourcePack("CustomWallpaperResources", true,
+				ResourcePackInfo packInfo = ResourcePackInfo.create("CustomWallpaperResources", true,
 						() -> new FolderPack(packPath.toFile()) {
 							@Override
 							public boolean isHidden() {
 								return true;
 							}
-						}, infoFactory, ResourcePackInfo.Priority.TOP, IPackNameDecorator.PLAIN);
+						}, infoFactory, ResourcePackInfo.Priority.TOP, IPackNameDecorator.DEFAULT);
 				if (packInfo != null) {
 					infoConsumer.accept(packInfo);
 				} else {

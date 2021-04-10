@@ -26,38 +26,38 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
-		super.drawGuiContainerBackgroundLayer(matrixStack, partialTicks, x, y);
-		int i = this.guiLeft;
-		int j = this.guiTop;
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
+		super.renderBg(matrixStack, partialTicks, x, y);
+		int i = this.leftPos;
+		int j = this.topPos;
 
-		Slot paperSlot = container.getPaperSlot();
-		Slot dyeSlot0 = container.getDyeSlot0();
-		Slot dyeSlot1 = container.getDyeSlot1();
-		Slot dyeSlot2 = container.getDyeSlot2();
-		if (!paperSlot.getHasStack()) {
-			blit(matrixStack, i + paperSlot.xPos, j + paperSlot.yPos, 176, 0, 16, 16);
+		Slot paperSlot = menu.getPaperSlot();
+		Slot dyeSlot0 = menu.getDyeSlot0();
+		Slot dyeSlot1 = menu.getDyeSlot1();
+		Slot dyeSlot2 = menu.getDyeSlot2();
+		if (!paperSlot.hasItem()) {
+			blit(matrixStack, i + paperSlot.x, j + paperSlot.y, 176, 0, 16, 16);
 		}
-		if (!dyeSlot0.getHasStack()) {
-			blit(matrixStack, i + dyeSlot0.xPos, j + dyeSlot0.yPos, 192, 0, 16, 16);
+		if (!dyeSlot0.hasItem()) {
+			blit(matrixStack, i + dyeSlot0.x, j + dyeSlot0.y, 192, 0, 16, 16);
 		}
-		if (!dyeSlot1.getHasStack()) {
-			blit(matrixStack, i + dyeSlot1.xPos, j + dyeSlot1.yPos, 192, 0, 16, 16);
+		if (!dyeSlot1.hasItem()) {
+			blit(matrixStack, i + dyeSlot1.x, j + dyeSlot1.y, 192, 0, 16, 16);
 		}
-		if (!dyeSlot2.getHasStack()) {
-			blit(matrixStack, i + dyeSlot2.xPos, j + dyeSlot2.yPos, 192, 0, 16, 16);
+		if (!dyeSlot2.hasItem()) {
+			blit(matrixStack, i + dyeSlot2.x, j + dyeSlot2.y, 192, 0, 16, 16);
 		}
 
-		i = this.guiLeft + 156;
-		j = this.guiTop + 17;
+		i = this.leftPos + 156;
+		j = this.topPos + 17;
 		if (this.scrollable) {
 			blit(matrixStack, i, j + this.scrolledY, 232, 0, 12, 15);
 		} else {
 			blit(matrixStack, i, j, 244, 0, 12, 15);
 		}
 
-		i = this.guiLeft + 112;
-		j = this.guiTop + 17;
+		i = this.leftPos + 112;
+		j = this.topPos + 17;
 		int k;
 		int l;
 		int relId;
@@ -67,28 +67,28 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
 				k = i + relId % 2 * 21;
 				l = j + relId / 2 * 21;
 				WallpaperDesign design = WallpaperDesign.getValuesExceptNone().get(id);
-				this.minecraft.getTextureManager().bindTexture(GUI_TEXTURE);
-				if (design == container.getSelectedWallpaperDesign()) {
+				this.minecraft.getTextureManager().bind(GUI_TEXTURE);
+				if (design == menu.getSelectedWallpaperDesign()) {
 					blit(matrixStack, k, l, 0, 198, 21, 21);
 				} else if (x >= k && x < k + 21 && y >= l && y < l + 21) {
 					blit(matrixStack, k, l, 0, 219, 21, 21);
 				} else {
 					blit(matrixStack, k, l, 0, 177, 21, 21);
 				}
-				this.minecraft.getTextureManager().bindTexture(new ResourceLocation(WithoutAWallpaper.MODID, "textures/block/wallpaper/" + design.toString() + "/design.png"));
+				this.minecraft.getTextureManager().bind(new ResourceLocation(WithoutAWallpaper.MODID, "textures/block/wallpaper/" + design.toString() + "/design.png"));
 				blit(matrixStack, k + 2, l + 2, 17, 17, 0, 0, 16, 16, 16, 16 );
 			} else {
 				break;
 			}
 		}
 
-		i = this.guiLeft + 52;
-		j = this.guiTop + 41;
-		if (container.getOutputSlot().getHasStack()) {
-			WallpaperType wallpaperType = WallpaperType.fromNBT(container.getOutputSlot().getStack().getTag().getCompound("wallpaperType"));
+		i = this.leftPos + 52;
+		j = this.topPos + 41;
+		if (menu.getOutputSlot().hasItem()) {
+			WallpaperType wallpaperType = WallpaperType.fromNBT(menu.getOutputSlot().getItem().getTag().getCompound("wallpaperType"));
 
 			for (ResourceLocation resourceLocation : wallpaperType.getResourceLocations()) {
-				this.minecraft.getTextureManager().bindTexture(new ResourceLocation(resourceLocation.getNamespace(), "textures/" + resourceLocation.getPath() + ".png"));
+				this.minecraft.getTextureManager().bind(new ResourceLocation(resourceLocation.getNamespace(), "textures/" + resourceLocation.getPath() + ".png"));
 				blit(matrixStack, i, j, 40, 40, 0, 0, 16, 16, 16, 16);
 			}
 		}
@@ -98,17 +98,17 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		this.isScrolling = false;
-		int i = this.guiLeft + 112;
-		int j = this.guiTop + 17;
+		int i = this.leftPos + 112;
+		int j = this.topPos + 17;
 
 		if (mouseX >= (double) i && mouseX < (double) (i + 42) && mouseY >= (double) j && mouseY < (double) (j + 70)) {
 			int id = this.selectedRow * 2 + ((int) ((mouseX - i) / 21)) + ((int) ((mouseY - j) / 21)) * 2;
-			this.minecraft.playerController.sendEnchantPacket((this.container).windowId, id);
+			this.minecraft.gameMode.handleInventoryButtonClick((this.menu).containerId, id);
 			return true;
 		}
 
-		i = this.guiLeft + 156;
-		j = this.guiTop + 17;
+		i = this.leftPos + 156;
+		j = this.topPos + 17;
 		if (mouseX >= (double)i && mouseX < (double)(i + 12) && mouseY >= (double)j && mouseY < (double)(j + 70)) {
 			this.isScrolling = true;
 			mouseDragged(mouseX, mouseY, button, 0, 0);
@@ -119,7 +119,7 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
 	@Override
 	public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
 		if (this.isScrolling && this.scrollable) {
-			double y = mouseY + dragY - this.guiTop - 24.5d;
+			double y = mouseY + dragY - this.topPos - 24.5d;
 			if (y < 0d) {
 				y = 0d;
 			} else if (y > 48d) {

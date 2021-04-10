@@ -22,7 +22,7 @@ public class Colors {
 				addAll();
 				break;
 			} else {
-				DyeColor dyeColor = DyeColor.byTranslationKey(color, null);
+				DyeColor dyeColor = DyeColor.byName(color, null);
 				if (dyeColor != null) {
 					this.colors.add(dyeColor);
 				} else {

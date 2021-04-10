@@ -52,14 +52,14 @@ public class PastingTableTile extends TileEntity {
 	}
 
 	@Override
-	public void remove() {
-		super.remove();
+	public void setRemoved() {
+		super.setRemoved();
 		itemHandlerLazyOptional.invalidate();
 	}
 
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(getPos(), getPos().add(1, 1, 1));
+		return new AxisAlignedBB(getBlockPos(), getBlockPos().offset(1, 1, 1));
 	}
 
 	private void updateWallpaper() {
@@ -102,10 +102,10 @@ public class PastingTableTile extends TileEntity {
 	}
 
 	public void update() {
-		if (world != null) {
-			if (!world.isRemote()) {
-				markDirty();
-				world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+		if (level != null) {
+			if (!level.isClientSide()) {
+				setChanged();
+				level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
 			}
 			updateWallpaper();
 		}
@@ -127,18 +127,18 @@ public class PastingTableTile extends TileEntity {
 	@Nullable
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+		return new SUpdateTileEntityPacket(worldPosition, 1, getUpdateTag());
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		handleUpdateTag(getBlockState(), pkt.getNbtCompound());
+		handleUpdateTag(getBlockState(), pkt.getTag());
 	}
 
 	@Override
-	public void read(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+	public void load(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
 		readData(nbt);
-		super.read(state, nbt);
+		super.load(state, nbt);
 		update();
 	}
 
@@ -154,10 +154,10 @@ public class PastingTableTile extends TileEntity {
 
 	@Nonnull
 	@Override
-	public CompoundNBT write(@Nonnull CompoundNBT nbt) {
+	public CompoundNBT save(@Nonnull CompoundNBT nbt) {
 		writeData(nbt);
 
-		return super.write(nbt);
+		return super.save(nbt);
 	}
 
 	private void writeData(CompoundNBT nbt) {

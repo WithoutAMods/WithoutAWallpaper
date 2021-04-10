@@ -27,7 +27,7 @@ public class WallpaperBakedModel extends BaseBakedModel {
 	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
 		RenderType layer = MinecraftForgeClient.getRenderLayer();
 
-		if (side != null || (layer != null && !layer.equals(RenderType.getTranslucent()))) {
+		if (side != null || (layer != null && !layer.equals(RenderType.translucent()))) {
 			return Collections.emptyList();
 		}
 
@@ -68,17 +68,17 @@ public class WallpaperBakedModel extends BaseBakedModel {
 
 	@Nonnull
 	@Override
-	public TextureAtlasSprite getParticleTexture() {
-		return Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(PARTICLE_TEXTURE);
+	public TextureAtlasSprite getParticleIcon() {
+		return Minecraft.getInstance().getTextureAtlas(AtlasTexture.LOCATION_BLOCKS).apply(PARTICLE_TEXTURE);
 	}
 
 	@Override
-	public boolean isAmbientOcclusion() {
+	public boolean useAmbientOcclusion() {
 		return false;
 	}
 
 	@Override
-	public boolean isBuiltInRenderer() {
+	public boolean isCustomRenderer() {
 		return true;
 	}
 }

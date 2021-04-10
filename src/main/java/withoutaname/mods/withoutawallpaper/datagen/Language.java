@@ -43,11 +43,11 @@ public class Language extends LanguageProvider {
 	}
 
 	private void add(Item key, String de_de, String en_us) {
-		add(key.getTranslationKey(), de_de, en_us);
+		add(key.getDescriptionId(), de_de, en_us);
 	}
 
 	private void add(Block key, String de_de, String en_us) {
-		add(key.getTranslationKey(), de_de, en_us);
+		add(key.getDescriptionId(), de_de, en_us);
 	}
 
 }

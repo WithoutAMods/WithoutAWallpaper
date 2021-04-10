@@ -23,23 +23,23 @@ public class WallpaperItem extends Item {
 
 	@Nonnull
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context) {
-		World world = context.getWorld();
-		BlockPos pos = world.getBlockState(context.getPos()).getMaterial().isReplaceable() ? context.getPos() : context.getPos().offset(context.getFace());
+	public ActionResultType useOn(ItemUseContext context) {
+		World world = context.getLevel();
+		BlockPos pos = world.getBlockState(context.getClickedPos()).getMaterial().isReplaceable() ? context.getClickedPos() : context.getClickedPos().relative(context.getClickedFace());
 		if (world.getBlockState(pos).getMaterial().isReplaceable() || world.getBlockState(pos).getBlock() == Registration.WALLPAPER_BLOCK.get()) {
-			ItemStack stack = context.getItem();
+			ItemStack stack = context.getItemInHand();
 			CompoundNBT compoundNBT = stack.getOrCreateTag();
 			if (compoundNBT.contains("wallpaperType")) {
 				BlockState state = world.getBlockState(pos);
 				if (state.getBlock() != Registration.WALLPAPER_BLOCK.get()) {
-					state = Registration.WALLPAPER_BLOCK.get().getDefaultState();
+					state = Registration.WALLPAPER_BLOCK.get().defaultBlockState();
 				}
-				if (!world.isRemote) {
-					Direction face = context.getFace().getOpposite();
-					world.setBlockState(pos, state);
-					WallpaperTile te = (WallpaperTile) world.getTileEntity(pos);
+				if (!world.isClientSide) {
+					Direction face = context.getClickedFace().getOpposite();
+					world.setBlockAndUpdate(pos, state);
+					WallpaperTile te = (WallpaperTile) world.getBlockEntity(pos);
 					te.setType(face, WallpaperType.fromNBT(compoundNBT.getCompound("wallpaperType")));
-					context.getItem().shrink(1);
+					context.getItemInHand().shrink(1);
 				} else {
 					context.getPlayer().playSound(Registration.WALLPAPER_BLOCK.get().getSoundType(state, world, pos, context.getPlayer()).getPlaceSound()
 							, 1.0f, 1.0f);
@@ -47,7 +47,7 @@ public class WallpaperItem extends Item {
 				return ActionResultType.SUCCESS;
 			}
 		}
-		return super.onItemUse(context);
+		return super.useOn(context);
 	}
 
 
