@@ -1,5 +1,7 @@
 package withoutaname.mods.withoutawallpaper.blocks;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -16,15 +18,14 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
+
 import withoutaname.mods.withoutalib.blocks.BaseContainer;
 import withoutaname.mods.withoutawallpaper.setup.Registration;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
-import javax.annotation.Nonnull;
-
 public class PastingTableContainer extends BaseContainer {
-
+	
 	private TileEntity tileEntity;
 	private PlayerEntity playerEntity;
 	private IItemHandler playerInventory;
@@ -33,7 +34,7 @@ public class PastingTableContainer extends BaseContainer {
 	private Slot dyeSlot1;
 	private Slot dyeSlot2;
 	private Slot outputSlot;
-
+	
 	public PastingTableContainer(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
 		super(Registration.PASTING_TABLE_CONTAINER.get(), windowId, 5);
 		this.tileEntity = world.getBlockEntity(pos);
@@ -47,17 +48,17 @@ public class PastingTableContainer extends BaseContainer {
 				dyeSlot2 = addSlot(new SlotItemHandler(handler, 3, 86, 20));
 			});
 			outputSlot = addSlot(new Slot(new Inventory(1), 0, 12, 60) {
-
+				
 				public boolean mayPlace(@Nonnull ItemStack stack) {
 					return false;
 				}
-
+				
 				@Nonnull
 				public ItemStack onTake(@Nonnull PlayerEntity thePlayer, @Nonnull ItemStack stack) {
 					WallpaperType wallpaperType = WallpaperType.fromNBT(stack.getTag().getCompound("wallpaperType"));
-
+					
 					PastingTableContainer.this.paperSlot.remove(1);
-
+					
 					if (wallpaperType.getDesign().getColorCount() > 0) {
 						PastingTableContainer.this.dyeSlot0.remove(1);
 					}
@@ -67,10 +68,10 @@ public class PastingTableContainer extends BaseContainer {
 					if (wallpaperType.getDesign().getColorCount() > 2) {
 						PastingTableContainer.this.dyeSlot2.remove(1);
 					}
-
+					
 					return super.onTake(thePlayer, stack);
 				}
-
+				
 			});
 			if (tileEntity instanceof PastingTableTile) {
 				PastingTableTile rollingStationTile = (PastingTableTile) this.tileEntity;
@@ -79,7 +80,7 @@ public class PastingTableContainer extends BaseContainer {
 					public int get() {
 						return rollingStationTile.getSelectedWallpaperDesign().toInt();
 					}
-
+					
 					@Override
 					public void set(int value) {
 						rollingStationTile.setSelectedWallpaperDesign(WallpaperDesign.fromInt(value));
@@ -89,9 +90,9 @@ public class PastingTableContainer extends BaseContainer {
 				updateOutput(rollingStationTile.getWallpaperType());
 			}
 		}
-		addPlayerInventorySlots(this.playerInventory, 8 ,95);
+		addPlayerInventorySlots(this.playerInventory, 8, 95);
 	}
-
+	
 	private void updateOutput(WallpaperType wallpaperType) {
 		if (wallpaperType.getDesign() != WallpaperDesign.NONE && PastingTableContainer.this.paperSlot.hasItem()) {
 			ItemStack itemStack = new ItemStack(Registration.WALLPAPER_ITEM.get());
@@ -102,7 +103,7 @@ public class PastingTableContainer extends BaseContainer {
 			outputSlot.set(ItemStack.EMPTY);
 		}
 	}
-
+	
 	@Override
 	public boolean clickMenuButton(@Nonnull PlayerEntity playerIn, int id) {
 		if (id >= 0 && id < WallpaperDesign.getValuesExceptNone().size() && tileEntity instanceof PastingTableTile) {
@@ -112,11 +113,11 @@ public class PastingTableContainer extends BaseContainer {
 			return false;
 		}
 	}
-
+	
 	public WallpaperDesign getSelectedWallpaperDesign() {
 		return ((PastingTableTile) this.tileEntity).getSelectedWallpaperDesign();
 	}
-
+	
 	@Override
 	public void removed(@Nonnull PlayerEntity playerIn) {
 		if (tileEntity != null && tileEntity instanceof PastingTableTile) {
@@ -124,35 +125,35 @@ public class PastingTableContainer extends BaseContainer {
 		}
 		super.removed(playerIn);
 	}
-
+	
 	@Override
 	public boolean stillValid(@Nonnull PlayerEntity playerIn) {
 		return stillValid(IWorldPosCallable.create(tileEntity.getLevel(), tileEntity.getBlockPos()), playerEntity, Registration.PASTING_TABLE_BLOCK.get());
 	}
-
+	
 	@OnlyIn(Dist.CLIENT)
 	public Slot getPaperSlot() {
 		return this.paperSlot;
 	}
-
+	
 	@OnlyIn(Dist.CLIENT)
 	public Slot getDyeSlot0() {
 		return this.dyeSlot0;
 	}
-
+	
 	@OnlyIn(Dist.CLIENT)
 	public Slot getDyeSlot1() {
 		return this.dyeSlot1;
 	}
-
+	
 	@OnlyIn(Dist.CLIENT)
 	public Slot getDyeSlot2() {
 		return this.dyeSlot2;
 	}
-
+	
 	@OnlyIn(Dist.CLIENT)
 	public Slot getOutputSlot() {
 		return this.outputSlot;
 	}
-
+	
 }

@@ -1,5 +1,8 @@
 package withoutaname.mods.withoutawallpaper.blocks;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -27,30 +30,25 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.block.AbstractBlock.Properties;
-
 public class PastingTableBlock extends Block {
-
+	
 	public PastingTableBlock() {
 		super(Properties.of(Material.WOOD)
 				.strength(2.5F)
 				.sound(SoundType.WOOD));
 	}
-
+	
 	@Nullable
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 		return new PastingTableTile();
 	}
-
+	
 	@Override
 	public boolean hasTileEntity(BlockState state) {
 		return true;
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	@Nonnull
@@ -65,7 +63,7 @@ public class PastingTableBlock extends Block {
 					public ITextComponent getDisplayName() {
 						return new TranslationTextComponent("screen.withoutawallpaper.pasting_table");
 					}
-
+					
 					@Override
 					public Container createMenu(int i, @Nonnull PlayerInventory playerInventory, @Nonnull PlayerEntity playerEntity) {
 						return new PastingTableContainer(i, world, pos, playerInventory, playerEntity);
@@ -78,7 +76,7 @@ public class PastingTableBlock extends Block {
 		}
 		return ActionResultType.SUCCESS;
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	@Nonnull
 	@Override
@@ -90,16 +88,16 @@ public class PastingTableBlock extends Block {
 		shape = VoxelShapes.join(shape, Block.box(13, 0, 1, 15, 10, 3), IBooleanFunction.OR);
 		return shape;
 	}
-
+	
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
 		return defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, context.getHorizontalDirection());
 	}
-
+	
 	@Override
 	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(BlockStateProperties.HORIZONTAL_FACING);
 	}
-
+	
 }

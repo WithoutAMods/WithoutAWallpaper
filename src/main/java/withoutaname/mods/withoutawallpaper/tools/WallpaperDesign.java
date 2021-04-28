@@ -1,32 +1,35 @@
 package withoutaname.mods.withoutawallpaper.tools;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.item.DyeColor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
 import withoutaname.mods.withoutawallpaper.setup.Config;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class WallpaperDesign {
-	public static final WallpaperDesign NONE = new WallpaperDesign("none");
-
-	private static List<WallpaperDesign> designs = new ArrayList<>();
-
+	
 	public static final Logger LOGGER = LogManager.getLogger();
-
+	
+	public static final WallpaperDesign NONE = new WallpaperDesign("none");
+	private static List<WallpaperDesign> designs = new ArrayList<>();
+	
 	private final String name;
 	private final Colors[] availableColors;
-
+	
 	public WallpaperDesign(String name, Colors... availableColors) {
 		this.name = name;
 		this.availableColors = availableColors;
 	}
-
+	
 	public static void loadDesigns() {
 		designs = new ArrayList<>();
 		List<String> designsString = Config.CUSTOM_DESIGNS.get();
@@ -34,7 +37,7 @@ public class WallpaperDesign {
 			if (designString.contains("[") && designString.contains("]")) {
 				String[] designStringSplit = designString.substring(0, designString.length() - 1).split("\\[");
 				String[] availableColorsString = designStringSplit[1].split(";");
-				if (availableColorsString.length <= 3){
+				if (availableColorsString.length <= 3) {
 					Colors[] availableColors = new Colors[availableColorsString.length];
 					for (int i = 0; i < availableColorsString.length; i++) {
 						availableColors[i] = new Colors(availableColorsString[i]);
@@ -49,7 +52,44 @@ public class WallpaperDesign {
 			}
 		}
 	}
-
+	
+	@Nonnull
+	@OnlyIn(Dist.CLIENT)
+	public static List<ResourceLocation> getAllTextures() {
+		List<ResourceLocation> textures = new ArrayList<>();
+		for (WallpaperDesign wallpaperDesign : WallpaperDesign.getValuesExceptNone()) {
+			textures.addAll(wallpaperDesign.getTextures());
+		}
+		return textures;
+	}
+	
+	public static List<WallpaperDesign> getValuesExceptNone() {
+		return designs;
+	}
+	
+	@Nullable
+	public static WallpaperDesign fromInt(int i) {
+		if (i == -1) {
+			return NONE;
+		}
+		if (i >= 0 && i < designs.size()) {
+			return designs.get(i);
+		}
+		return null;
+	}
+	
+	public static WallpaperDesign fromString(@Nonnull String design) {
+		if (design.equals("none")) {
+			return NONE;
+		}
+		for (WallpaperDesign d : designs) {
+			if (d.getName().equals(design)) {
+				return d;
+			}
+		}
+		throw new IllegalArgumentException("No design " + design);
+	}
+	
 	//varies with changes to the config
 	public int toInt() {
 		for (int i = 0; i < designs.size(); i++) {
@@ -59,33 +99,24 @@ public class WallpaperDesign {
 		}
 		return -1; //NONE or wrong name
 	}
-
+	
 	@Override
 	public String toString() {
 		return this.name;
 	}
-
-	@OnlyIn(Dist.CLIENT)
-	public static List<ResourceLocation> getAllTextures() {
-		List<ResourceLocation> textures = new ArrayList<>();
-		for (WallpaperDesign wallpaperDesign : WallpaperDesign.getValuesExceptNone()) {
-			textures.addAll(wallpaperDesign.getTextures());
-		}
-		return textures;
-	}
-
+	
 	public String getName() {
 		return name;
 	}
-
+	
 	public Colors[] getAvailableColors() {
 		return availableColors;
 	}
-
+	
 	public int getColorCount() {
 		return availableColors.length;
 	}
-
+	
 	@OnlyIn(Dist.CLIENT)
 	public List<ResourceLocation> getTextures() {
 		List<ResourceLocation> textures = new ArrayList<>();
@@ -98,31 +129,5 @@ public class WallpaperDesign {
 		}
 		return textures;
 	}
-
-	public static List<WallpaperDesign> getValuesExceptNone() {
-		return designs;
-	}
-
-	public static WallpaperDesign fromInt(int i) {
-		if (i == -1) {
-			return NONE;
-		}
-		if (i >= 0 && i < designs.size()) {
-			return designs.get(i);
-		}
-		return null;
-	}
-
-	public static WallpaperDesign fromString(String design) {
-		if (design.equals("none")) {
-			return NONE;
-		}
-		for (WallpaperDesign d : designs) {
-			if (d.getName().equals(design)) {
-				return d;
-			}
-		}
-		throw new IllegalArgumentException("No design " + design);
-	}
-
+	
 }

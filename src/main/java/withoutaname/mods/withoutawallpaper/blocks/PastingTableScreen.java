@@ -7,6 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import withoutaname.mods.withoutalib.blocks.BaseScreen;
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
@@ -14,23 +15,23 @@ import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
 @OnlyIn(Dist.CLIENT)
 public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
-
+	
 	private final int rowsCount = (int) Math.ceil((double) WallpaperDesign.getValuesExceptNone().size() / 2.0d);
+	private final boolean scrollable = rowsCount > 3;
 	private int selectedRow = 0;
 	private int scrolledY = 0;
-	private final boolean scrollable = rowsCount > 3;
 	private boolean isScrolling = false;
-
+	
 	public PastingTableScreen(PastingTableContainer container, PlayerInventory playerInventory, ITextComponent title) {
 		super(container, new ResourceLocation(WithoutAWallpaper.MODID, "textures/gui/container/pasting_table.png"), playerInventory, title, 176, 177);
 	}
-
+	
 	@Override
 	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 		super.renderBg(matrixStack, partialTicks, x, y);
 		int i = this.leftPos;
 		int j = this.topPos;
-
+		
 		Slot paperSlot = menu.getPaperSlot();
 		Slot dyeSlot0 = menu.getDyeSlot0();
 		Slot dyeSlot1 = menu.getDyeSlot1();
@@ -47,7 +48,7 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
 		if (!dyeSlot2.hasItem()) {
 			blit(matrixStack, i + dyeSlot2.x, j + dyeSlot2.y, 192, 0, 16, 16);
 		}
-
+		
 		i = this.leftPos + 156;
 		j = this.topPos + 17;
 		if (this.scrollable) {
@@ -55,7 +56,7 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
 		} else {
 			blit(matrixStack, i, j, 244, 0, 12, 15);
 		}
-
+		
 		i = this.leftPos + 112;
 		j = this.topPos + 17;
 		int k;
@@ -76,46 +77,46 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
 					blit(matrixStack, k, l, 0, 177, 21, 21);
 				}
 				this.minecraft.getTextureManager().bind(new ResourceLocation(WithoutAWallpaper.MODID, "textures/block/wallpaper/" + design.toString() + "/design.png"));
-				blit(matrixStack, k + 2, l + 2, 17, 17, 0, 0, 16, 16, 16, 16 );
+				blit(matrixStack, k + 2, l + 2, 17, 17, 0, 0, 16, 16, 16, 16);
 			} else {
 				break;
 			}
 		}
-
+		
 		i = this.leftPos + 52;
 		j = this.topPos + 41;
 		if (menu.getOutputSlot().hasItem()) {
 			WallpaperType wallpaperType = WallpaperType.fromNBT(menu.getOutputSlot().getItem().getTag().getCompound("wallpaperType"));
-
+			
 			for (ResourceLocation resourceLocation : wallpaperType.getResourceLocations()) {
 				this.minecraft.getTextureManager().bind(new ResourceLocation(resourceLocation.getNamespace(), "textures/" + resourceLocation.getPath() + ".png"));
 				blit(matrixStack, i, j, 40, 40, 0, 0, 16, 16, 16, 16);
 			}
 		}
 	}
-
-
+	
+	
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		this.isScrolling = false;
 		int i = this.leftPos + 112;
 		int j = this.topPos + 17;
-
+		
 		if (mouseX >= (double) i && mouseX < (double) (i + 42) && mouseY >= (double) j && mouseY < (double) (j + 70)) {
 			int id = this.selectedRow * 2 + ((int) ((mouseX - i) / 21)) + ((int) ((mouseY - j) / 21)) * 2;
 			this.minecraft.gameMode.handleInventoryButtonClick((this.menu).containerId, id);
 			return true;
 		}
-
+		
 		i = this.leftPos + 156;
 		j = this.topPos + 17;
-		if (mouseX >= (double)i && mouseX < (double)(i + 12) && mouseY >= (double)j && mouseY < (double)(j + 70)) {
+		if (mouseX >= (double) i && mouseX < (double) (i + 12) && mouseY >= (double) j && mouseY < (double) (j + 70)) {
 			this.isScrolling = true;
 			mouseDragged(mouseX, mouseY, button, 0, 0);
 		}
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
-
+	
 	@Override
 	public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
 		if (this.isScrolling && this.scrollable) {
@@ -132,7 +133,7 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
 			return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
 		}
 	}
-
+	
 	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
 		if (this.scrollable) {
@@ -146,7 +147,8 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
 			}
 			this.scrolledY = (int) Math.round((double) this.selectedRow / (double) (rowsCount - 3) * 48d);
 		}
-
+		
 		return true;
 	}
+	
 }

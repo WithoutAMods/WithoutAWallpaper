@@ -1,25 +1,18 @@
 package withoutaname.mods.withoutawallpaper.datagen;
 
-import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import java.util.function.Consumer;
+import javax.annotation.Nonnull;
+
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ItemTags;
-import net.minecraftforge.common.Tags;
-import withoutaname.mods.withoutawallpaper.setup.Registration;
 
-import javax.annotation.Nonnull;
-import java.util.function.Consumer;
-
-public class Recipes extends RecipeProvider{
-
+public class Recipes extends RecipeProvider {
+	
 	public Recipes(DataGenerator generatorIn) {
 		super(generatorIn);
 	}
-
+	
 	@Override
 	protected void buildShapelessRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
 		/*
@@ -34,5 +27,5 @@ public class Recipes extends RecipeProvider{
 				.addCriterion("rolling_station", InventoryChangeTrigger.Instance.forItems(ItemTags.PLANKS))
 				.build(consumer);*/
 	}
-
+	
 }

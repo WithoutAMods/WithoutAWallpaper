@@ -10,6 +10,7 @@ import net.minecraft.loot.conditions.Inverted;
 import net.minecraft.loot.functions.CopyNbt;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+
 import withoutaname.mods.withoutalib.datagen.BaseLootTableProvider;
 import withoutaname.mods.withoutalib.datagen.loot.conditions.NBTCondition;
 import withoutaname.mods.withoutawallpaper.blocks.PastingTableBlock;
@@ -17,11 +18,11 @@ import withoutaname.mods.withoutawallpaper.setup.Registration;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 
 public class LootTables extends BaseLootTableProvider {
-
+	
 	public LootTables(DataGenerator dataGeneratorIn) {
 		super(dataGeneratorIn);
 	}
-
+	
 	@Override
 	protected void addTables() {
 		PastingTableBlock rollingStationBlock = Registration.PASTING_TABLE_BLOCK.get();
@@ -32,7 +33,7 @@ public class LootTables extends BaseLootTableProvider {
 										CopyNbt.Action.REPLACE)
 								.copy("selectedDesign", "BlockEntityTag.selectedDesign",
 										CopyNbt.Action.REPLACE)))));
-
+		
 		Block wallpaperBlock = Registration.WALLPAPER_BLOCK.get();
 		LootTable.Builder lootTable = LootTable.lootTable()
 				.withPool(getWallpaperLootPool(wallpaperBlock, Direction.NORTH))
@@ -43,7 +44,7 @@ public class LootTables extends BaseLootTableProvider {
 				.withPool(getWallpaperLootPool(wallpaperBlock, Direction.DOWN));
 		lootTables.put(wallpaperBlock, lootTable);
 	}
-
+	
 	private LootPool.Builder getWallpaperLootPool(Block block, Direction direction) {
 		CompoundNBT tag = new CompoundNBT();
 		CompoundNBT wallpaperType = new CompoundNBT();
@@ -57,5 +58,5 @@ public class LootTables extends BaseLootTableProvider {
 						.invert(new NBTCondition.Builder(NBTCondition.Source.BLOCK_ENTITY)
 								.fromPredicate(new NBTPredicate(tag))));
 	}
-
+	
 }

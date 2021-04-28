@@ -1,5 +1,7 @@
 package withoutaname.mods.withoutawallpaper.blocks;
 
+import javax.annotation.Nonnull;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
@@ -15,25 +17,28 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
 import withoutaname.mods.withoutawallpaper.setup.Registration;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
-import javax.annotation.Nonnull;
-
 public class PastingTableRenderer extends TileEntityRenderer<PastingTableTile> {
-
+	
 	public static final ResourceLocation DYES_TEXTURE = new ResourceLocation(WithoutAWallpaper.MODID, "block/pasting_table/dyes");
-
+	
 	public PastingTableRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
 		super(rendererDispatcherIn);
 	}
-
-	private void add(IVertexBuilder builder, MatrixStack stack, float x, float y, float z, float u, float v) {
-		add(builder, stack, x, y, z, u, v, new float[] {1.0f, 1.0f, 1.0f, 1.0f});
+	
+	public static void register() {
+		ClientRegistry.bindTileEntityRenderer(Registration.PASTING_TABLE_TILE.get(), PastingTableRenderer::new);
 	}
-
+	
+	private void add(IVertexBuilder builder, MatrixStack stack, float x, float y, float z, float u, float v) {
+		add(builder, stack, x, y, z, u, v, new float[]{1.0f, 1.0f, 1.0f, 1.0f});
+	}
+	
 	private void add(IVertexBuilder builder, MatrixStack stack, float x, float y, float z, float u, float v, float[] color) {
 		builder.vertex(stack.last().pose(), x, y, z)
 				.color(color[0], color[1], color[2], color.length > 3 ? color[3] : 1.0f)
@@ -42,12 +47,12 @@ public class PastingTableRenderer extends TileEntityRenderer<PastingTableTile> {
 				.normal(0, 1, 0)
 				.endVertex();
 	}
-
+	
 	@Override
 	public void render(PastingTableTile tileEntityIn, float partialTicks, MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		matrixStackIn.pushPose();
 		Quaternion rotation;
-				switch (tileEntityIn.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING)) {
+		switch (tileEntityIn.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING)) {
 			default:
 			case NORTH:
 				rotation = Vector3f.YP.rotationDegrees(0);
@@ -65,7 +70,7 @@ public class PastingTableRenderer extends TileEntityRenderer<PastingTableTile> {
 		matrixStackIn.translate(.5, .5, .5);
 		matrixStackIn.mulPose(rotation);
 		matrixStackIn.translate(-.5, -.5, -.5);
-
+		
 		TextureAtlasSprite dyeSprite = Minecraft.getInstance().getTextureAtlas(AtlasTexture.LOCATION_BLOCKS).apply(DYES_TEXTURE);
 		IVertexBuilder builder = bufferIn.getBuffer(RenderType.solid());
 		DyeColor[] colors = tileEntityIn.getColors();
@@ -87,8 +92,8 @@ public class PastingTableRenderer extends TileEntityRenderer<PastingTableTile> {
 			add(builder, matrixStackIn, 0.9375f, 0.84275f, 0.421875f, dyeSprite.getU1(), dyeSprite.getV1(), colors[2].getTextureDiffuseColors());
 			add(builder, matrixStackIn, 0.9375f, 0.84275f, 0.265625f, dyeSprite.getU1(), dyeSprite.getV0(), colors[2].getTextureDiffuseColors());
 		}
-
-		if (tileEntityIn.hasPaper()){
+		
+		if (tileEntityIn.hasPaper()) {
 			WallpaperType wallpaperType = tileEntityIn.getWallpaperType();
 			if (wallpaperType.getDesign() == WallpaperDesign.NONE) {
 				add(builder, matrixStackIn, 0.0625f, 0.69375f, 0.3125f, dyeSprite.getU0(), dyeSprite.getV0());
@@ -105,12 +110,8 @@ public class PastingTableRenderer extends TileEntityRenderer<PastingTableTile> {
 				}
 			}
 		}
-
+		
 		matrixStackIn.popPose();
 	}
-
-	public static void register() {
-		ClientRegistry.bindTileEntityRenderer(Registration.PASTING_TABLE_TILE.get(), PastingTableRenderer::new);
-	}
-
+	
 }

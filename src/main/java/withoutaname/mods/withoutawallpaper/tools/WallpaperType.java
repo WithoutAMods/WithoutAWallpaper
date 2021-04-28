@@ -1,24 +1,26 @@
 package withoutaname.mods.withoutawallpaper.tools;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.Nonnull;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.DyeColor;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class WallpaperType {
-
+	
 	public static final WallpaperType NONE = new WallpaperType(WallpaperDesign.NONE);
-
+	
 	private WallpaperDesign design;
 	private DyeColor[] colors;
-
-	public WallpaperType(WallpaperDesign design, DyeColor... colors) {
+	
+	public WallpaperType(@Nonnull WallpaperDesign design, @Nonnull DyeColor... colors) {
 		if (colors.length != design.getColorCount()) {
 			throw new IllegalStateException(colors.length + " colors defined, " + design.getColorCount() + " colors expected for design " + design.toString() + "!");
 		} else {
@@ -26,12 +28,12 @@ public class WallpaperType {
 			this.colors = colors;
 		}
 	}
-
+	
 	public WallpaperType(WallpaperDesign design, List<DyeColor> colors) {
 		this(design, getColorsFromList(colors));
 	}
-
-	public static WallpaperType fromNBT(CompoundNBT wallpaperTypeNBT) {
+	
+	public static WallpaperType fromNBT(@Nonnull CompoundNBT wallpaperTypeNBT) {
 		List<DyeColor> colors = new ArrayList<>();
 		for (int colorID : wallpaperTypeNBT.getIntArray("colors")) {
 			colors.add(DyeColor.byId(colorID));
@@ -46,7 +48,16 @@ public class WallpaperType {
 			return new WallpaperType(new WallpaperDesign(wallpaperTypeNBT.getString("design"), availableColors), colors);
 		}
 	}
-
+	
+	@Nonnull
+	private static DyeColor[] getColorsFromList(@Nonnull List<DyeColor> colors) {
+		DyeColor[] array = new DyeColor[colors.size()];
+		for (int i = 0; i < colors.size(); i++) {
+			array[i] = colors.get(i);
+		}
+		return array;
+	}
+	
 	public CompoundNBT toNBT() {
 		CompoundNBT wallpaperTypeNBT = new CompoundNBT();
 		wallpaperTypeNBT.putString("design", design.toString());
@@ -57,27 +68,19 @@ public class WallpaperType {
 		wallpaperTypeNBT.putIntArray("colors", colorIDs);
 		return wallpaperTypeNBT;
 	}
-
-	private static DyeColor[] getColorsFromList(List<DyeColor> colors) {
-		DyeColor[] array = new DyeColor[colors.size()];
-		for (int i = 0; i < colors.size(); i++) {
-			array[i] = colors.get(i);
-		}
-		return array;
+	
+	public DyeColor[] getColors() {
+		return colors;
 	}
-
-	public void setColors(DyeColor[] colors) {
+	
+	public void setColors(@Nonnull DyeColor[] colors) {
 		if (colors.length != design.getColorCount()) {
 			throw new IllegalStateException(colors.length + " colors defined, " + design.getColorCount() + " colors expected for design " + design.toString() + "!");
 		} else {
 			this.colors = colors;
 		}
 	}
-
-	public DyeColor[] getColors() {
-		return colors;
-	}
-
+	
 	public List<ResourceLocation> getResourceLocations() {
 		List<ResourceLocation> resourceLocations = new ArrayList<>();
 		for (int i = 0; i < colors.length; i++) {
@@ -85,7 +88,7 @@ public class WallpaperType {
 		}
 		return resourceLocations;
 	}
-
+	
 	public List<TextureAtlasSprite> getAtlasSprites() {
 		List<TextureAtlasSprite> atlasSprites = new ArrayList<>();
 		for (ResourceLocation resourceLocation : getResourceLocations()) {
@@ -93,13 +96,13 @@ public class WallpaperType {
 		}
 		return atlasSprites;
 	}
-
-	public void setDesign(WallpaperDesign design) {
-		this.design = design;
-	}
-
+	
 	public WallpaperDesign getDesign() {
 		return design;
 	}
-
+	
+	public void setDesign(WallpaperDesign design) {
+		this.design = design;
+	}
+	
 }
