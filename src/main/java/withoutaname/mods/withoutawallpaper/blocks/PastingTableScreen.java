@@ -1,6 +1,7 @@
 package withoutaname.mods.withoutawallpaper.blocks;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
@@ -15,6 +16,7 @@ import withoutaname.mods.withoutalib.blocks.BaseScreen;
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
 import withoutaname.mods.withoutawallpaper.gui.DesignSelectionWidget;
 import withoutaname.mods.withoutawallpaper.gui.IDesignSelectable;
+import withoutaname.mods.withoutawallpaper.gui.WallpaperWidget;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
@@ -29,6 +31,7 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> implem
 	protected void init() {
 		super.init();
 		addButton(new DesignSelectionWidget(leftPos + 112, topPos + 17, 2, 3, this::addButton, this));
+		addButton(new WallpaperWidget(leftPos + 52, topPos + 41, 40, this::getWallpaperType));
 	}
 	
 	@Override
@@ -53,20 +56,18 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> implem
 		if (!dyeSlot2.hasItem()) {
 			blit(matrixStack, i + dyeSlot2.x, j + dyeSlot2.y, 192, 0, 16, 16);
 		}
-		
-		i = this.leftPos + 52;
-		j = this.topPos + 41;
-		if (menu.getOutputSlot().hasItem()) {
-			CompoundNBT tag = menu.getOutputSlot().getItem().getTag();
-			assert tag != null;
-			WallpaperType wallpaperType = WallpaperType.fromNBT(tag.getCompound("wallpaperType"));
-			
-			for (ResourceLocation resourceLocation : wallpaperType.getResourceLocations()) {
-				assert this.minecraft != null;
-				this.minecraft.getTextureManager().bind(new ResourceLocation(resourceLocation.getNamespace(), "textures/" + resourceLocation.getPath() + ".png"));
-				blit(matrixStack, i, j, 40, 40, 0, 0, 16, 16, 16, 16);
-			}
+	}
+	
+	@Nullable
+	private WallpaperType getWallpaperType() {
+		if (!menu.getPaperSlot().hasItem()) {
+			return null;
+		} else if (!menu.getOutputSlot().hasItem()) {
+			return WallpaperType.NONE;
 		}
+		CompoundNBT tag = menu.getOutputSlot().getItem().getTag();
+		assert tag != null;
+		return WallpaperType.fromNBT(tag.getCompound("wallpaperType"));
 	}
 	
 	@Override
