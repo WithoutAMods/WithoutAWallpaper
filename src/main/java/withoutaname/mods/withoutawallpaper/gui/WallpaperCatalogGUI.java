@@ -12,6 +12,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
+import withoutaname.mods.withoutawallpaper.gui.designselection.DesignSelectionWidget;
+import withoutaname.mods.withoutawallpaper.gui.designselection.IDesignSelectable;
 import withoutaname.mods.withoutawallpaper.tools.Colors;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;

@@ -1,4 +1,4 @@
-package withoutaname.mods.withoutawallpaper.gui;
+package withoutaname.mods.withoutawallpaper.gui.designselection;
 
 import javax.annotation.Nonnull;
 

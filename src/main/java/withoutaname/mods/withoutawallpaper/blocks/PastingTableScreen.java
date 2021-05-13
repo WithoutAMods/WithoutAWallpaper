@@ -14,9 +14,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import withoutaname.mods.withoutalib.blocks.BaseScreen;
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
-import withoutaname.mods.withoutawallpaper.gui.DesignSelectionWidget;
-import withoutaname.mods.withoutawallpaper.gui.IDesignSelectable;
 import withoutaname.mods.withoutawallpaper.gui.WallpaperWidget;
+import withoutaname.mods.withoutawallpaper.gui.designselection.DesignSelectionWidget;
+import withoutaname.mods.withoutawallpaper.gui.designselection.IDesignSelectable;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
