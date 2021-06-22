@@ -41,7 +41,7 @@ public class ColorSelectionScreen extends Screen {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				DyeColor color = DyeColor.byId(i + j * 4);
-				ColorButton colorButton = addButton(new ColorButton(guiLeft + 10 + i * 24, guiTop + 10 + j * 24, () -> color, button -> onPress(color)));
+				ColorButton colorButton = addButton(new ColorButton(guiLeft + 10 + i * 24, guiTop + 10 + j * 24, () -> color, button -> onPress(color), this));
 				if (!availableColors.contains(color)) {
 					colorButton.active = false;
 				}

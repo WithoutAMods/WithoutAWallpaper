@@ -53,7 +53,7 @@ public class WallpaperCatalogGUI extends Screen implements IDesignSelectable {
 					this.colors[finalI] = color;
 					updateType();
 				}));
-			}));
+			}, this));
 		}
 		addButton(new WallpaperWidget(guiLeft + 16, guiTop + 40, 56, () -> type));
 		addButton(new DesignSelectionWidget(guiLeft + 89, guiTop + 11, 2, 4, this::addButton, this));
