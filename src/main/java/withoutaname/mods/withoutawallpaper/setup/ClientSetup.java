@@ -62,28 +62,31 @@ public class ClientSetup {
 	}
 	
 	public static void registerResourcePack() {
-		Path packPath = Minecraft.getInstance().gameDirectory.toPath().resolve("config").resolve("withoutawallpaper").resolve("CustomWallpaperResources");
-		try {
-			createEmptyPack(packPath);
-			ResourcePackList resourcePackList = Minecraft.getInstance().getResourcePackRepository();
-			resourcePackList.addPackFinder((infoConsumer, infoFactory) ->
-			{
-				ResourcePackInfo packInfo = ResourcePackInfo.create("CustomWallpaperResources", true,
-						() -> new FolderPack(packPath.toFile()) {
-							@Override
-							public boolean isHidden() {
-								return true;
-							}
-						}, infoFactory, ResourcePackInfo.Priority.TOP, IPackNameDecorator.DEFAULT);
-				if (packInfo != null) {
-					infoConsumer.accept(packInfo);
-				} else {
-					LOGGER.error("Couldn't register resource pack CustomWallpaperResources");
-				}
-			});
-			
-		} catch (IOException e) {
-			LOGGER.error("Couldn't create resource pack " + packPath.toString(), e);
+		Minecraft instance = Minecraft.getInstance();
+		if (instance != null) {// instance is null in runData
+			Path packPath = instance.gameDirectory.toPath().resolve("config").resolve("withoutawallpaper").resolve("CustomWallpaperResources");
+			try {
+				createEmptyPack(packPath);
+				ResourcePackList resourcePackList = Minecraft.getInstance().getResourcePackRepository();
+				resourcePackList.addPackFinder((infoConsumer, infoFactory) ->
+				{
+					ResourcePackInfo packInfo = ResourcePackInfo.create("CustomWallpaperResources", true,
+							() -> new FolderPack(packPath.toFile()) {
+								@Override
+								public boolean isHidden() {
+									return true;
+								}
+							}, infoFactory, ResourcePackInfo.Priority.TOP, IPackNameDecorator.DEFAULT);
+					if (packInfo != null) {
+						infoConsumer.accept(packInfo);
+					} else {
+						LOGGER.error("Couldn't register resource pack CustomWallpaperResources");
+					}
+				});
+				
+			} catch (IOException e) {
+				LOGGER.error("Couldn't create resource pack " + packPath.toString(), e);
+			}
 		}
 	}
 	

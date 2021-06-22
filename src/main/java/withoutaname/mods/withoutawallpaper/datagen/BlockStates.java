@@ -20,6 +20,8 @@ public class BlockStates extends BlockStateProvider {
 		
 		horizontalBlock(Registration.PASTING_TABLE_BLOCK.get(), models().getExistingFile(modLoc("block/pasting_table")));
 		itemModels().withExistingParent("pasting_table", modLoc("block/pasting_table"));
+		
+		itemModels().singleTexture("wallpaper_catalog", mcLoc("item/generated"), "layer0", modLoc("item/wallpaper_catalog"));
 	}
 	
 }

@@ -29,6 +29,8 @@ public class Language extends LanguageProvider {
 		add(Registration.PASTING_TABLE_BLOCK.get(), PASTING_TABLE_DE_DE, PASTING_TABLE_EN_US);
 		add("screen.withoutawallpaper.pasting_table", PASTING_TABLE_DE_DE, PASTING_TABLE_EN_US);
 		
+		add(Registration.WALLPAPER_CATALOG_ITEM.get(), "Tapetenkatalog", "Wallpaper Catalog");
+		
 		add("itemGroup.withoutawallpaper", "WithoutAWallpaper", "WithoutAWallpaper");
 	}
 	

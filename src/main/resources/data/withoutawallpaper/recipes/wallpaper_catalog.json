@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DDD",
+    "DBD",
+    "DDD"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:book"
+    },
+    "D": {
+      "tag": "forge:dyes"
+    }
+  },
+  "result": {
+    "item": "withoutawallpaper:wallpaper_catalog"
+  }
+}

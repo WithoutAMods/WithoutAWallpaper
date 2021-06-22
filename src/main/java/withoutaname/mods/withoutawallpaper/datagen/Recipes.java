@@ -18,14 +18,23 @@ public class Recipes extends RecipeProvider {
 		/*
 		Not possible to generate criterion with tag (manually added)
 
-		ShapedRecipeBuilder.shapedRecipe(Registration.ROLLING_STATION_BLOCK.get())
-				.patternLine("DD")
-				.patternLine("WW")
-				.patternLine("WW")
-				.key('D', Tags.Items.DYES)
-				.key('W', ItemTags.PLANKS)
-				.addCriterion("rolling_station", InventoryChangeTrigger.Instance.forItems(ItemTags.PLANKS))
-				.build(consumer);*/
+		ShapedRecipeBuilder.shaped(Registration.ROLLING_STATION_BLOCK.get())
+				.pattern("DD")
+				.pattern("WW")
+				.pattern("WW")
+				.define('D', Tags.Items.DYES)
+				.define('W', ItemTags.PLANKS)
+				.unlockedBy("rolling_station", InventoryChangeTrigger.Instance.hasItems(ItemTags.PLANKS))
+				.save(consumer);
+		
+		ShapedRecipeBuilder.shaped(Registration.WALLPAPER_CATALOG_ITEM.get())
+				.pattern("DDD")
+				.pattern("DBD")
+				.pattern("DDD")
+				.define('B', Items.BOOK)
+				.define('D', Items.BLUE_DYE)
+				.unlockedBy("book", InventoryChangeTrigger.Instance.hasItems(Items.BOOK))
+				.save(consumer);*/
 	}
 	
 }
