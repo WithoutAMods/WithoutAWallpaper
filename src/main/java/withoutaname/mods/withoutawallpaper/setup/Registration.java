@@ -12,7 +12,9 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+
 import withoutaname.mods.withoutawallpaper.blocks.*;
+import withoutaname.mods.withoutawallpaper.items.WallpaperCatalogItem;
 import withoutaname.mods.withoutawallpaper.items.WallpaperItem;
 
 import static withoutaname.mods.withoutawallpaper.WithoutAWallpaper.MODID;
@@ -30,11 +32,7 @@ public class Registration {
 		TILES.register(FMLJavaModLoadingContext.get().getModEventBus());
 		CONTAINERS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
-
-	public static final RegistryObject<WallpaperBlock> WALLPAPER_BLOCK = BLOCKS.register("wallpaper", WallpaperBlock::new);
-	public static final RegistryObject<WallpaperItem> WALLPAPER_ITEM = ITEMS.register("wallpaper", WallpaperItem::new);
-	public static final RegistryObject<TileEntityType<WallpaperTile>> WALLPAPER_TILE = TILES.register("wallpaper", () -> TileEntityType.Builder.of(WallpaperTile::new, WALLPAPER_BLOCK.get()).build(null));
-
+	
 	public static final RegistryObject<PastingTableBlock> PASTING_TABLE_BLOCK = BLOCKS.register("pasting_table", PastingTableBlock::new);
 	public static final RegistryObject<BlockItem> PASTING_TABLE_ITEM = ITEMS.register("pasting_table", () -> new BlockItem(PASTING_TABLE_BLOCK.get(), ModSetup.defaultItemProperties));
 	public static final RegistryObject<TileEntityType<PastingTableTile>> PASTING_TABLE_TILE = TILES.register("pasting_table", () -> TileEntityType.Builder.of(PastingTableTile::new, PASTING_TABLE_BLOCK.get()).build(null));
@@ -43,5 +41,11 @@ public class Registration {
 		World world = inv.player.getCommandSenderWorld();
 		return new PastingTableContainer(windowId, world, pos, inv, inv.player);
 	}));
+
+	public static final RegistryObject<WallpaperBlock> WALLPAPER_BLOCK = BLOCKS.register("wallpaper", WallpaperBlock::new);
+	public static final RegistryObject<WallpaperItem> WALLPAPER_ITEM = ITEMS.register("wallpaper", WallpaperItem::new);
+	public static final RegistryObject<TileEntityType<WallpaperTile>> WALLPAPER_TILE = TILES.register("wallpaper", () -> TileEntityType.Builder.of(WallpaperTile::new, WALLPAPER_BLOCK.get()).build(null));
+
+	public static final RegistryObject<WallpaperCatalogItem> WALLPAPER_CATALOG_ITEM = ITEMS.register("wallpaper_catalog", WallpaperCatalogItem::new);
 
 }

@@ -1,8 +1,12 @@
 package withoutaname.mods.withoutawallpaper.blocks;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -10,24 +14,28 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import withoutaname.mods.withoutalib.blocks.BaseScreen;
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
+import withoutaname.mods.withoutawallpaper.gui.WallpaperWidget;
+import withoutaname.mods.withoutawallpaper.gui.designselection.DesignSelectionWidget;
+import withoutaname.mods.withoutawallpaper.gui.designselection.IDesignSelectable;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
 @OnlyIn(Dist.CLIENT)
-public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
-	
-	private final int rowsCount = (int) Math.ceil((double) WallpaperDesign.getValuesExceptNone().size() / 2.0d);
-	private final boolean scrollable = rowsCount > 3;
-	private int selectedRow = 0;
-	private int scrolledY = 0;
-	private boolean isScrolling = false;
+public class PastingTableScreen extends BaseScreen<PastingTableContainer> implements IDesignSelectable {
 	
 	public PastingTableScreen(PastingTableContainer container, PlayerInventory playerInventory, ITextComponent title) {
 		super(container, new ResourceLocation(WithoutAWallpaper.MODID, "textures/gui/container/pasting_table.png"), playerInventory, title, 176, 177);
 	}
 	
 	@Override
-	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
+	protected void init() {
+		super.init();
+		addButton(new DesignSelectionWidget(leftPos + 112, topPos + 17, 2, 3, this::addButton, this));
+		addButton(new WallpaperWidget(leftPos + 52, topPos + 41, 40, this::getWallpaperType));
+	}
+	
+	@Override
+	protected void renderBg(@Nonnull MatrixStack matrixStack, float partialTicks, int x, int y) {
 		super.renderBg(matrixStack, partialTicks, x, y);
 		int i = this.leftPos;
 		int j = this.topPos;
@@ -48,107 +56,30 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> {
 		if (!dyeSlot2.hasItem()) {
 			blit(matrixStack, i + dyeSlot2.x, j + dyeSlot2.y, 192, 0, 16, 16);
 		}
-		
-		i = this.leftPos + 156;
-		j = this.topPos + 17;
-		if (this.scrollable) {
-			blit(matrixStack, i, j + this.scrolledY, 232, 0, 12, 15);
-		} else {
-			blit(matrixStack, i, j, 244, 0, 12, 15);
-		}
-		
-		i = this.leftPos + 112;
-		j = this.topPos + 17;
-		int k;
-		int l;
-		int relId;
-		for (int id = selectedRow * 2; id < (selectedRow + 3) * 2; id++) {
-			if (id < WallpaperDesign.getValuesExceptNone().size()) {
-				relId = id - selectedRow * 2;
-				k = i + relId % 2 * 21;
-				l = j + relId / 2 * 21;
-				WallpaperDesign design = WallpaperDesign.getValuesExceptNone().get(id);
-				this.minecraft.getTextureManager().bind(GUI_TEXTURE);
-				if (design == menu.getSelectedWallpaperDesign()) {
-					blit(matrixStack, k, l, 0, 198, 21, 21);
-				} else if (x >= k && x < k + 21 && y >= l && y < l + 21) {
-					blit(matrixStack, k, l, 0, 219, 21, 21);
-				} else {
-					blit(matrixStack, k, l, 0, 177, 21, 21);
-				}
-				this.minecraft.getTextureManager().bind(new ResourceLocation(WithoutAWallpaper.MODID, "textures/block/wallpaper/" + design.toString() + "/design.png"));
-				blit(matrixStack, k + 2, l + 2, 17, 17, 0, 0, 16, 16, 16, 16);
-			} else {
-				break;
-			}
-		}
-		
-		i = this.leftPos + 52;
-		j = this.topPos + 41;
-		if (menu.getOutputSlot().hasItem()) {
-			WallpaperType wallpaperType = WallpaperType.fromNBT(menu.getOutputSlot().getItem().getTag().getCompound("wallpaperType"));
-			
-			for (ResourceLocation resourceLocation : wallpaperType.getResourceLocations()) {
-				this.minecraft.getTextureManager().bind(new ResourceLocation(resourceLocation.getNamespace(), "textures/" + resourceLocation.getPath() + ".png"));
-				blit(matrixStack, i, j, 40, 40, 0, 0, 16, 16, 16, 16);
-			}
-		}
 	}
 	
-	
-	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		this.isScrolling = false;
-		int i = this.leftPos + 112;
-		int j = this.topPos + 17;
-		
-		if (mouseX >= (double) i && mouseX < (double) (i + 42) && mouseY >= (double) j && mouseY < (double) (j + 70)) {
-			int id = this.selectedRow * 2 + ((int) ((mouseX - i) / 21)) + ((int) ((mouseY - j) / 21)) * 2;
-			this.minecraft.gameMode.handleInventoryButtonClick((this.menu).containerId, id);
-			return true;
+	@Nullable
+	private WallpaperType getWallpaperType() {
+		if (!menu.getPaperSlot().hasItem()) {
+			return null;
+		} else if (!menu.getOutputSlot().hasItem()) {
+			return WallpaperType.NONE;
 		}
-		
-		i = this.leftPos + 156;
-		j = this.topPos + 17;
-		if (mouseX >= (double) i && mouseX < (double) (i + 12) && mouseY >= (double) j && mouseY < (double) (j + 70)) {
-			this.isScrolling = true;
-			mouseDragged(mouseX, mouseY, button, 0, 0);
-		}
-		return super.mouseClicked(mouseX, mouseY, button);
+		CompoundNBT tag = menu.getOutputSlot().getItem().getTag();
+		assert tag != null;
+		return WallpaperType.fromNBT(tag.getCompound("wallpaperType"));
 	}
 	
 	@Override
-	public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-		if (this.isScrolling && this.scrollable) {
-			double y = mouseY + dragY - this.topPos - 24.5d;
-			if (y < 0d) {
-				y = 0d;
-			} else if (y > 48d) {
-				y = 48d;
-			}
-			this.scrolledY = (int) Math.round(y);
-			this.selectedRow = (int) Math.round(y / 48d * (double) (rowsCount - 3));
-			return true;
-		} else {
-			return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
-		}
+	public WallpaperDesign getDesign() {
+		return menu.getSelectedWallpaperDesign();
 	}
 	
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-		if (this.scrollable) {
-			while (delta < 0 && this.selectedRow < this.rowsCount - 3) {
-				this.selectedRow++;
-				delta++;
-			}
-			while (delta > 0 && this.selectedRow > 0) {
-				this.selectedRow--;
-				delta--;
-			}
-			this.scrolledY = (int) Math.round((double) this.selectedRow / (double) (rowsCount - 3) * 48d);
-		}
-		
-		return true;
+	public void setDesign(@Nonnull WallpaperDesign design) {
+		assert minecraft != null;
+		assert minecraft.gameMode != null;
+		minecraft.gameMode.handleInventoryButtonClick((this.menu).containerId, design.toInt());
 	}
 	
 }
