@@ -26,7 +26,7 @@ repositories {
     }
 }
 
-version = "${withoutawallpaper_version}"
+version = "${minecraft_version}-${withoutawallpaper_version}"
 group = 'withoutaname.mods.withoutawallpaper' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'WithoutAWallpaper'
 
