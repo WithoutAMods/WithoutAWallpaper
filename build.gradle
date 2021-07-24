@@ -29,7 +29,7 @@ repositories {
 
 version = "${minecraft_version}-${mod_version}"
 group = "${mod_base_package}.${mod_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = mod_id
+archivesBaseName = mod_base_name
 
 // Mojang ships Java 16 to end users in 1.17+ instead of Java 8 in 1.16 or lower, so your mod should target Java 16.
 java.toolchain.languageVersion = JavaLanguageVersion.of(16)
@@ -163,9 +163,9 @@ dependencies {
 //    implementation fg.deobf("mcjty.theoneprobe:TheOneProbe-${top_version}")
 
     if (findProject(':WithoutALib') != null) {
-        implementation project(':WithoutALib')
+        compileOnly project(':WithoutALib')
     } else {
-        implementation fg.deobf("withoutaname.mods.withoutalib:WithoutALib:${withoutalib_version}")
+        compileOnly fg.deobf("withoutaname.mods.withoutalib:WithoutALib:${withoutalib_version}")
     }
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
