@@ -12,6 +12,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,7 +28,6 @@ import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.awt.*;
 
 public class PastingTableBlock extends BaseEntityBlock {
 	
@@ -71,6 +71,12 @@ public class PastingTableBlock extends BaseEntityBlock {
 		shape = Shapes.join(shape, Block.box(13, 0, 13, 15, 10, 15), BooleanOp.OR);
 		shape = Shapes.join(shape, Block.box(13, 0, 1, 15, 10, 3), BooleanOp.OR);
 		return shape;
+	}
+	
+	@Nonnull
+	@Override
+	public RenderShape getRenderShape(@Nonnull BlockState pState) {
+		return RenderShape.MODEL;
 	}
 	
 	@Nullable

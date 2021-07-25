@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -120,4 +121,9 @@ public class WallpaperBlock extends BaseEntityBlock {
 		return shape;
 	}
 	
+	@Nonnull
+	@Override
+	public RenderShape getRenderShape(@Nonnull BlockState pState) {
+		return RenderShape.MODEL;
+	}
 }
