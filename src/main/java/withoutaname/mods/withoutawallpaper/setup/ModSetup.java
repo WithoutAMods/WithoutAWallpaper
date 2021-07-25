@@ -4,13 +4,14 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 
 import javax.annotation.Nonnull;
 
 public class ModSetup {
 	
-	public static final CreativeModeTab DEFAULT_CREATIVE_TAB = new CreativeModeTab("withoutawallpaper") {
+	public static final CreativeModeTab DEFAULT_CREATIVE_TAB = new CreativeModeTab(WithoutAWallpaper.MODID) {
 		
 		@Nonnull
 		@Override

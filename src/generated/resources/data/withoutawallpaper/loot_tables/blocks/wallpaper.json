@@ -3,7 +3,8 @@
   "pools": [
     {
       "name": "withoutawallpaper:wallpaper",
-      "rolls": 1,
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
@@ -35,11 +36,13 @@
             "nbt_predicate": "{north:{design:\"none\"}}"
           }
         }
-      ]
+      ],
+      "functions": []
     },
     {
       "name": "withoutawallpaper:wallpaper",
-      "rolls": 1,
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
@@ -71,11 +74,13 @@
             "nbt_predicate": "{east:{design:\"none\"}}"
           }
         }
-      ]
+      ],
+      "functions": []
     },
     {
       "name": "withoutawallpaper:wallpaper",
-      "rolls": 1,
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
@@ -107,11 +112,13 @@
             "nbt_predicate": "{south:{design:\"none\"}}"
           }
         }
-      ]
+      ],
+      "functions": []
     },
     {
       "name": "withoutawallpaper:wallpaper",
-      "rolls": 1,
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
@@ -143,11 +150,13 @@
             "nbt_predicate": "{west:{design:\"none\"}}"
           }
         }
-      ]
+      ],
+      "functions": []
     },
     {
       "name": "withoutawallpaper:wallpaper",
-      "rolls": 1,
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
@@ -179,11 +188,13 @@
             "nbt_predicate": "{up:{design:\"none\"}}"
           }
         }
-      ]
+      ],
+      "functions": []
     },
     {
       "name": "withoutawallpaper:wallpaper",
-      "rolls": 1,
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
@@ -215,7 +226,8 @@
             "nbt_predicate": "{down:{design:\"none\"}}"
           }
         }
-      ]
+      ],
+      "functions": []
     }
   ]
 }

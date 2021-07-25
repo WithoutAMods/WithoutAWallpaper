@@ -17,7 +17,7 @@ public class DataGenerators {
 			generator.addProvider(new Language(generator, "en_us"));
 		}
 		if (event.includeServer()) {
-//			generator.addProvider(new LootTables(generator));
+			generator.addProvider(new LootTables(generator));
 			generator.addProvider(new Recipes(generator));
 		}
 	}
