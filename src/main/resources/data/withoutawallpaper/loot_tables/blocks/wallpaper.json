@@ -1,0 +1,221 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "name": "withoutawallpaper:wallpaper",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "north",
+                  "target": "wallpaperType",
+                  "op": "replace"
+                }
+              ]
+            }
+          ],
+          "name": "withoutawallpaper:wallpaper"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        },
+        {
+          "condition": "minecraft:inverted",
+          "term": {
+            "condition": "withoutalib:nbt_condition",
+            "source": "block_entity",
+            "nbt_predicate": "{north:{design:\"none\"}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "withoutawallpaper:wallpaper",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "east",
+                  "target": "wallpaperType",
+                  "op": "replace"
+                }
+              ]
+            }
+          ],
+          "name": "withoutawallpaper:wallpaper"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        },
+        {
+          "condition": "minecraft:inverted",
+          "term": {
+            "condition": "withoutalib:nbt_condition",
+            "source": "block_entity",
+            "nbt_predicate": "{east:{design:\"none\"}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "withoutawallpaper:wallpaper",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "south",
+                  "target": "wallpaperType",
+                  "op": "replace"
+                }
+              ]
+            }
+          ],
+          "name": "withoutawallpaper:wallpaper"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        },
+        {
+          "condition": "minecraft:inverted",
+          "term": {
+            "condition": "withoutalib:nbt_condition",
+            "source": "block_entity",
+            "nbt_predicate": "{south:{design:\"none\"}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "withoutawallpaper:wallpaper",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "west",
+                  "target": "wallpaperType",
+                  "op": "replace"
+                }
+              ]
+            }
+          ],
+          "name": "withoutawallpaper:wallpaper"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        },
+        {
+          "condition": "minecraft:inverted",
+          "term": {
+            "condition": "withoutalib:nbt_condition",
+            "source": "block_entity",
+            "nbt_predicate": "{west:{design:\"none\"}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "withoutawallpaper:wallpaper",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "up",
+                  "target": "wallpaperType",
+                  "op": "replace"
+                }
+              ]
+            }
+          ],
+          "name": "withoutawallpaper:wallpaper"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        },
+        {
+          "condition": "minecraft:inverted",
+          "term": {
+            "condition": "withoutalib:nbt_condition",
+            "source": "block_entity",
+            "nbt_predicate": "{up:{design:\"none\"}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "withoutawallpaper:wallpaper",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "down",
+                  "target": "wallpaperType",
+                  "op": "replace"
+                }
+              ]
+            }
+          ],
+          "name": "withoutawallpaper:wallpaper"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        },
+        {
+          "condition": "minecraft:inverted",
+          "term": {
+            "condition": "withoutalib:nbt_condition",
+            "source": "block_entity",
+            "nbt_predicate": "{down:{design:\"none\"}}"
+          }
+        }
+      ]
+    }
+  ]
+}
