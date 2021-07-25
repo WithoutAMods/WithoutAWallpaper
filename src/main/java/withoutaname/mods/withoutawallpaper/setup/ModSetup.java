@@ -1,17 +1,16 @@
 package withoutaname.mods.withoutawallpaper.setup;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
+
+import javax.annotation.Nonnull;
 
 public class ModSetup {
 	
-	public static final ItemGroup defaultItemGroup = new ItemGroup("withoutawallpaper") {
+	public static final CreativeModeTab DEFAULT_CREATIVE_TAB = new CreativeModeTab("withoutawallpaper") {
 		
 		@Nonnull
 		@Override
@@ -20,7 +19,7 @@ public class ModSetup {
 		}
 		
 	};
-	public static final Item.Properties defaultItemProperties = new Item.Properties().tab(defaultItemGroup);
+	public static final Item.Properties DEFAULT_ITEM_PROPERTIES = new Item.Properties().tab(DEFAULT_CREATIVE_TAB);
 	
 	public static void init(FMLCommonSetupEvent event) {
 		WallpaperDesign.loadDesigns();

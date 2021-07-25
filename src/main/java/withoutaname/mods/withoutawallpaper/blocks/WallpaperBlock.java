@@ -1,37 +1,37 @@
 package withoutaname.mods.withoutawallpaper.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.PushReaction;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import withoutaname.mods.withoutawallpaper.setup.Registration;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
-public class WallpaperBlock extends Block {
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class WallpaperBlock extends BaseEntityBlock {
 	
-	public static final double THICKNESS = 0.1D;
+	public static final float THICKNESS = 0.1F;
 	
 	public WallpaperBlock() {
 		super(Properties.of(Material.DECORATION)
@@ -41,22 +41,16 @@ public class WallpaperBlock extends Block {
 	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		return new WallpaperTile();
+	public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
+		return new WallpaperEntity(pos, state);
 	}
 	
 	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
-	}
-	
-	@Override
-	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+	public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
 		WallpaperType wallpaperType = null;
-		TileEntity te = world.getBlockEntity(pos);
-		if (te instanceof WallpaperTile) {
-			WallpaperTile tile = (WallpaperTile) te;
-			Vector3d vec = target.getLocation().subtract(pos.getX(), pos.getY(), pos.getZ());
+		BlockEntity te = world.getBlockEntity(pos);
+		if (te instanceof WallpaperEntity tile) {
+			Vec3 vec = target.getLocation().subtract(pos.getX(), pos.getY(), pos.getZ());
 			final double d = THICKNESS * 1.01; // thickness * tolerance
 			if (tile.getType(Direction.UP).getDesign() != WallpaperDesign.NONE && 1d - vec.y < d / 16d) {
 				wallpaperType = tile.getType(Direction.UP);
@@ -74,7 +68,7 @@ public class WallpaperBlock extends Block {
 		}
 		if (wallpaperType != null) {
 			ItemStack itemStack = new ItemStack(Registration.WALLPAPER_ITEM.get());
-			CompoundNBT tag = itemStack.getOrCreateTag();
+			CompoundTag tag = itemStack.getOrCreateTag();
 			tag.put("wallpaperType", wallpaperType.toNBT());
 			return itemStack;
 		} else {
@@ -92,13 +86,11 @@ public class WallpaperBlock extends Block {
 	@SuppressWarnings("deprecation")
 	@Nonnull
 	@Override
-	public VoxelShape getShape(@Nonnull BlockState state, IBlockReader worldIn, @Nonnull BlockPos pos, @Nonnull ISelectionContext context) {
+	public VoxelShape getShape(@Nonnull BlockState state, BlockGetter worldIn, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
 		List<VoxelShape> shapeList = new ArrayList<>();
 		
-		TileEntity te = worldIn.getBlockEntity(pos);
-		if (te instanceof WallpaperTile) {
-			WallpaperTile wallpaperTile = (WallpaperTile) te;
-			
+		BlockEntity te = worldIn.getBlockEntity(pos);
+		if (te instanceof WallpaperEntity wallpaperTile) {
 			if (wallpaperTile.getType(Direction.UP).getDesign() != WallpaperDesign.NONE) {
 				shapeList.add(Block.box(0.0D, 16.0D - THICKNESS, 0.0D, 16.0D, 16.0D, 16.0D));
 			}
@@ -119,11 +111,11 @@ public class WallpaperBlock extends Block {
 			}
 		}
 		if (shapeList.isEmpty()) {
-			shapeList.add(VoxelShapes.empty());
+			shapeList.add(Shapes.empty());
 		}
 		VoxelShape shape = shapeList.get(0);
 		for (int i = 1; i < shapeList.size(); i++) {
-			shape = VoxelShapes.join(shape, shapeList.get(i), IBooleanFunction.OR);
+			shape = Shapes.join(shape, shapeList.get(i), BooleanOp.OR);
 		}
 		return shape;
 	}

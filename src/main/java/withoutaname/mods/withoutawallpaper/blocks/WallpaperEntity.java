@@ -1,32 +1,32 @@
 package withoutaname.mods.withoutawallpaper.blocks;
 
-import java.util.HashMap;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.util.Constants;
-
 import withoutaname.mods.withoutawallpaper.setup.Registration;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
-public class WallpaperTile extends TileEntity {
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+
+public class WallpaperEntity extends BlockEntity {
 	
 	public static final ModelProperty<HashMap<Direction, WallpaperType>> DESIGNS = new ModelProperty<>();
 	
 	private final HashMap<Direction, WallpaperType> designs = new HashMap<>();
 	
-	public WallpaperTile() {
-		super(Registration.WALLPAPER_TILE.get());
+	public WallpaperEntity(BlockPos pos, BlockState state) {
+		super(Registration.WALLPAPER_TILE.get(), pos, state);
 		for (Direction direction : Direction.values()) {
 			designs.put(direction, WallpaperType.NONE);
 		}
@@ -54,26 +54,26 @@ public class WallpaperTile extends TileEntity {
 	
 	@Nonnull
 	@Override
-	public CompoundNBT getUpdateTag() {
-		CompoundNBT tag = super.getUpdateTag();
+	public CompoundTag getUpdateTag() {
+		CompoundTag tag = super.getUpdateTag();
 		writeDesigns(tag);
 		return tag;
 	}
 	
 	@Override
-	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+	public void handleUpdateTag(CompoundTag tag) {
 		readDesigns(tag);
 	}
 	
 	@Nullable
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(worldPosition, 1, getUpdateTag());
+	public ClientboundBlockEntityDataPacket getUpdatePacket() {
+		return new ClientboundBlockEntityDataPacket(worldPosition, 1, getUpdateTag());
 	}
 	
 	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		handleUpdateTag(getBlockState(), pkt.getTag());
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+		handleUpdateTag(pkt.getTag());
 	}
 	
 	@Nonnull
@@ -85,12 +85,12 @@ public class WallpaperTile extends TileEntity {
 	}
 	
 	@Override
-	public void load(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
-		super.load(state, nbt);
+	public void load(@Nonnull CompoundTag nbt) {
+		super.load(nbt);
 		readDesigns(nbt);
 	}
 	
-	private void readDesigns(CompoundNBT nbt) {
+	private void readDesigns(CompoundTag nbt) {
 		for (Direction direction : Direction.values()) {
 			if (nbt.contains(direction.toString())) {
 				designs.put(direction, WallpaperType.fromNBT(nbt.getCompound(direction.toString())));
@@ -101,12 +101,12 @@ public class WallpaperTile extends TileEntity {
 	
 	@Nonnull
 	@Override
-	public CompoundNBT save(@Nonnull CompoundNBT nbt) {
+	public CompoundTag save(@Nonnull CompoundTag nbt) {
 		writeDesigns(nbt);
 		return super.save(nbt);
 	}
 	
-	private void writeDesigns(CompoundNBT nbt) {
+	private void writeDesigns(CompoundTag nbt) {
 		designs.forEach((direction, wallpaperType) -> nbt.put(direction.toString(), wallpaperType.toNBT()));
 	}
 	

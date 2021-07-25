@@ -1,23 +1,22 @@
 package withoutaname.mods.withoutawallpaper.blocks;
 
-import java.util.*;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.data.IModelData;
-
 import withoutaname.mods.withoutalib.blocks.BaseBakedModel;
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class WallpaperBakedModel extends BaseBakedModel {
 	
@@ -34,10 +33,10 @@ public class WallpaperBakedModel extends BaseBakedModel {
 		
 		List<BakedQuad> quads = new ArrayList<>();
 		
-		HashMap<Direction, WallpaperType> designs = extraData.getData(WallpaperTile.DESIGNS);
+		HashMap<Direction, WallpaperType> designs = extraData.getData(WallpaperEntity.DESIGNS);
 		
 		if (designs != null) {
-			final double thickness = WallpaperBlock.THICKNESS / 16;
+			final float thickness = WallpaperBlock.THICKNESS / 16;
 			designs.forEach((direction, wallpaperType) -> {
 				for (TextureAtlasSprite textureAtlasSprite : wallpaperType.getAtlasSprites()) {
 					switch (direction) {
@@ -70,7 +69,7 @@ public class WallpaperBakedModel extends BaseBakedModel {
 	@Nonnull
 	@Override
 	public TextureAtlasSprite getParticleIcon() {
-		return Minecraft.getInstance().getTextureAtlas(AtlasTexture.LOCATION_BLOCKS).apply(PARTICLE_TEXTURE);
+		return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(PARTICLE_TEXTURE);
 	}
 	
 	@Override

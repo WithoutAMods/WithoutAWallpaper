@@ -1,23 +1,27 @@
 package withoutaname.mods.withoutawallpaper.items;
 
-import javax.annotation.Nonnull;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Quaternion;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.vector.Quaternion;
-
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
-public class WallpaperItemStackRenderer extends ItemStackTileEntityRenderer {
+import javax.annotation.Nonnull;
+
+public class WallpaperItemStackRenderer extends BlockEntityWithoutLevelRenderer {
 	
-	private void add(@Nonnull IVertexBuilder builder, @Nonnull MatrixStack stack, float x, float y, float z, float u, float v) {
+	public WallpaperItemStackRenderer() {
+		super(Minecraft.getInstance() == null ? null : Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance() == null ? null : Minecraft.getInstance().getEntityModels());
+	}
+	
+	private void add(@Nonnull VertexConsumer builder, @Nonnull PoseStack stack, float x, float y, float z, float u, float v) {
 		builder.vertex(stack.last().pose(), x, y, z)
 				.color(1.0f, 1.0f, 1.0f, 1.0f)
 				.uv(u, v)
@@ -27,16 +31,16 @@ public class WallpaperItemStackRenderer extends ItemStackTileEntityRenderer {
 	}
 	
 	@Override
-	public void renderByItem(@Nonnull ItemStack stack, @Nonnull ItemCameraTransforms.TransformType p_239207_2_, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
+	public void renderByItem(@Nonnull ItemStack stack, @Nonnull ItemTransforms.TransformType p_239207_2_, @Nonnull PoseStack matrixStack, @Nonnull MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
 		WallpaperType wallpaperType = WallpaperType.NONE;
 		if (stack.hasTag()) {
-			CompoundNBT tag = stack.getTag();
+			CompoundTag tag = stack.getTag();
 			if (tag != null && tag.contains("wallpaperType")) {
 				wallpaperType = WallpaperType.fromNBT(tag.getCompound("wallpaperType"));
 			}
 		}
 		
-		IVertexBuilder builder = buffer.getBuffer(RenderType.translucent());
+		VertexConsumer builder = buffer.getBuffer(RenderType.translucent());
 		
 		matrixStack.pushPose();
 		
@@ -79,7 +83,7 @@ public class WallpaperItemStackRenderer extends ItemStackTileEntityRenderer {
 		}
 		matrixStack.translate(-.5, -.5, -.5);
 		
-		float z = p_239207_2_ == ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND || p_239207_2_ == ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND ? .75f : .5f;
+		float z = p_239207_2_ == ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND || p_239207_2_ == ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND ? .75f : .5f;
 		
 		for (TextureAtlasSprite sprite : wallpaperType.getAtlasSprites()) {
 			add(builder, matrixStack, 0, 0, z, sprite.getU0(), sprite.getV0());
@@ -87,7 +91,7 @@ public class WallpaperItemStackRenderer extends ItemStackTileEntityRenderer {
 			add(builder, matrixStack, 1, 1, z, sprite.getU1(), sprite.getV1());
 			add(builder, matrixStack, 0, 1, z, sprite.getU0(), sprite.getV1());
 			
-			if (!(p_239207_2_.firstPerson() && p_239207_2_ == ItemCameraTransforms.TransformType.GUI)) {
+			if (!(p_239207_2_.firstPerson() && p_239207_2_ == ItemTransforms.TransformType.GUI)) {
 				add(builder, matrixStack, 0, 1, z, sprite.getU0(), sprite.getV1());
 				add(builder, matrixStack, 1, 1, z, sprite.getU1(), sprite.getV1());
 				add(builder, matrixStack, 1, 0, z, sprite.getU1(), sprite.getV0());

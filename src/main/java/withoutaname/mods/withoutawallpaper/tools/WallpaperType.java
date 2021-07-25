@@ -1,17 +1,16 @@
 package withoutaname.mods.withoutawallpaper.tools;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
+import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
+
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Nonnull;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.DyeColor;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-
-import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
 
 public class WallpaperType {
 	
@@ -33,7 +32,7 @@ public class WallpaperType {
 		this(design, getColorsFromList(colors));
 	}
 	
-	public static WallpaperType fromNBT(@Nonnull CompoundNBT wallpaperTypeNBT) {
+	public static WallpaperType fromNBT(@Nonnull CompoundTag wallpaperTypeNBT) {
 		List<DyeColor> colors = new ArrayList<>();
 		for (int colorID : wallpaperTypeNBT.getIntArray("colors")) {
 			colors.add(DyeColor.byId(colorID));
@@ -58,8 +57,8 @@ public class WallpaperType {
 		return array;
 	}
 	
-	public CompoundNBT toNBT() {
-		CompoundNBT wallpaperTypeNBT = new CompoundNBT();
+	public CompoundTag toNBT() {
+		CompoundTag wallpaperTypeNBT = new CompoundTag();
 		wallpaperTypeNBT.putString("design", design.toString());
 		int[] colorIDs = new int[colors.length];
 		for (int i = 0; i < colors.length; i++) {
@@ -92,7 +91,7 @@ public class WallpaperType {
 	public List<TextureAtlasSprite> getAtlasSprites() {
 		List<TextureAtlasSprite> atlasSprites = new ArrayList<>();
 		for (ResourceLocation resourceLocation : getResourceLocations()) {
-			atlasSprites.add(Minecraft.getInstance().getTextureAtlas(AtlasTexture.LOCATION_BLOCKS).apply(resourceLocation));
+			atlasSprites.add(Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(resourceLocation));
 		}
 		return atlasSprites;
 	}

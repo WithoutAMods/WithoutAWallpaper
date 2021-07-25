@@ -7,16 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 
+import com.mojang.blaze3d.platform.ScreenManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.resources.FolderPack;
-import net.minecraft.resources.IPackNameDecorator;
-import net.minecraft.resources.ResourcePackInfo;
-import net.minecraft.resources.ResourcePackList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.FolderPackResources;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackRepository;
+import net.minecraft.server.packs.repository.PackSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -41,10 +42,10 @@ public class ClientSetup {
 	public static final Logger LOGGER = LogManager.getLogger();
 	
 	public static void init(@Nonnull final FMLClientSetupEvent event) {
-		ScreenManager.register(Registration.PASTING_TABLE_CONTAINER.get(), PastingTableScreen::new);
+		MenuScreens.register(Registration.PASTING_TABLE_CONTAINER.get(), PastingTableScreen::new);
 		PastingTableRenderer.register();
 		
-		event.enqueueWork(() -> RenderTypeLookup.setRenderLayer(Registration.WALLPAPER_BLOCK.get(), RenderType.translucent()));
+		event.enqueueWork(() -> ItemBlockRenderTypes.setRenderLayer(Registration.WALLPAPER_BLOCK.get(), RenderType.translucent()));
 	}
 	
 	@SubscribeEvent
@@ -54,7 +55,7 @@ public class ClientSetup {
 	
 	@SubscribeEvent
 	public static void onTextureStitch(@Nonnull TextureStitchEvent.Pre event) {
-		if (event.getMap().location().equals(AtlasTexture.LOCATION_BLOCKS)) {
+		if (event.getMap().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
 			event.addSprite(DYES_TEXTURE);
 			event.addSprite(PARTICLE_TEXTURE);
 		}
@@ -67,16 +68,16 @@ public class ClientSetup {
 			Path packPath = instance.gameDirectory.toPath().resolve("config").resolve("withoutawallpaper").resolve("CustomWallpaperResources");
 			try {
 				createEmptyPack(packPath);
-				ResourcePackList resourcePackList = Minecraft.getInstance().getResourcePackRepository();
+				PackRepository resourcePackList = Minecraft.getInstance().getResourcePackRepository();
 				resourcePackList.addPackFinder((infoConsumer, infoFactory) ->
 				{
-					ResourcePackInfo packInfo = ResourcePackInfo.create("CustomWallpaperResources", true,
-							() -> new FolderPack(packPath.toFile()) {
+					Pack packInfo = Pack.create("CustomWallpaperResources", true,
+							() -> new FolderPackResources(packPath.toFile()) {
 								@Override
 								public boolean isHidden() {
 									return true;
 								}
-							}, infoFactory, ResourcePackInfo.Priority.TOP, IPackNameDecorator.DEFAULT);
+							}, infoFactory, Pack.Position.TOP, PackSource.DEFAULT);
 					if (packInfo != null) {
 						infoConsumer.accept(packInfo);
 					} else {

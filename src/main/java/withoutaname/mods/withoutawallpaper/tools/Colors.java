@@ -1,12 +1,12 @@
 package withoutaname.mods.withoutawallpaper.tools;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.annotation.Nonnull;
-
-import net.minecraft.item.DyeColor;
+import net.minecraft.world.item.DyeColor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Colors {
 	

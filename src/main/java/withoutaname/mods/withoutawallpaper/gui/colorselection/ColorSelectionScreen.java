@@ -1,18 +1,20 @@
 package withoutaname.mods.withoutawallpaper.gui.colorselection;
 
-import java.util.List;
-import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.item.DyeColor;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
 
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
+
+import java.util.List;
+import java.util.function.Consumer;
 
 public class ColorSelectionScreen extends Screen {
 	
@@ -27,7 +29,7 @@ public class ColorSelectionScreen extends Screen {
 	private int guiTop;
 	
 	public ColorSelectionScreen(Screen parent, List<DyeColor> availableColors, Consumer<DyeColor> colorConsumer) {
-		super(new TranslationTextComponent("screen." + WithoutAWallpaper.MODID + ".color_selection"));
+		super(new TranslatableComponent("screen." + WithoutAWallpaper.MODID + ".color_selection"));
 		this.parent = parent;
 		this.availableColors = availableColors;
 		this.colorConsumer = colorConsumer;
@@ -41,7 +43,7 @@ public class ColorSelectionScreen extends Screen {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				DyeColor color = DyeColor.byId(i + j * 4);
-				ColorButton colorButton = addButton(new ColorButton(guiLeft + 10 + i * 24, guiTop + 10 + j * 24, () -> color, button -> onPress(color), this));
+				ColorButton colorButton = addRenderableWidget(new ColorButton(guiLeft + 10 + i * 24, guiTop + 10 + j * 24, () -> color, button -> onPress(color), this));
 				if (!availableColors.contains(color)) {
 					colorButton.active = false;
 				}
@@ -50,7 +52,7 @@ public class ColorSelectionScreen extends Screen {
 	}
 	
 	@Override
-	public void render(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void render(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack);
 		this.drawGuiBackgroundLayer(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
@@ -61,10 +63,10 @@ public class ColorSelectionScreen extends Screen {
 		Minecraft.getInstance().setScreen(parent);
 	}
 	
-	protected void drawGuiBackgroundLayer(MatrixStack matrixStack) {
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		assert this.minecraft != null;
-		this.minecraft.getTextureManager().bind(GUI_TEXTURE);
+	protected void drawGuiBackgroundLayer(PoseStack matrixStack) {
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, GUI_TEXTURE);
 		int i = this.guiLeft;
 		int j = this.guiTop;
 		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);

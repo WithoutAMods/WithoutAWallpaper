@@ -3,16 +3,19 @@ package withoutaname.mods.withoutawallpaper.gui.designselection;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
 
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 
-public class DesignSelectionWidget extends Widget {
+public class DesignSelectionWidget extends AbstractWidget {
 	
 	private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(WithoutAWallpaper.MODID, "textures/gui/container/pasting_table.png");
 	
@@ -26,8 +29,8 @@ public class DesignSelectionWidget extends Widget {
 	private int scrolledY = 0;
 	private boolean isScrolling = false;
 	
-	public DesignSelectionWidget(int x, int y, int designsPerRow, int designsPerCollum, Consumer<Widget> widgetConsumer, IDesignSelectable designSelectable) {
-		super(x, y, designsPerRow * 21 + 14, designsPerCollum * 21, StringTextComponent.EMPTY);
+	public DesignSelectionWidget(int x, int y, int designsPerRow, int designsPerCollum, Consumer<AbstractWidget> widgetConsumer, IDesignSelectable designSelectable) {
+		super(x, y, designsPerRow * 21 + 14, designsPerCollum * 21, TextComponent.EMPTY);
 		this.designsPerRow = designsPerRow;
 		this.designsPerCollum = designsPerCollum;
 		rowsCount = (int) Math.ceil((double) WallpaperDesign.getValuesExceptNone().size() / designsPerRow);
@@ -54,9 +57,10 @@ public class DesignSelectionWidget extends Widget {
 	}
 	
 	@Override
-	public void render(@Nonnull MatrixStack matrixStack, int x, int y, float partialTicks) {
-		Minecraft minecraft = Minecraft.getInstance();
-		minecraft.getTextureManager().bind(GUI_TEXTURE);
+	public void render(@Nonnull PoseStack matrixStack, int x, int y, float partialTicks) {
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, GUI_TEXTURE);
 		
 		int i = this.x + 44;
 		int j = this.y;
@@ -70,9 +74,6 @@ public class DesignSelectionWidget extends Widget {
 	
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		Minecraft minecraft = Minecraft.getInstance();
-		minecraft.getTextureManager().bind(GUI_TEXTURE);
-		
 		this.isScrolling = false;
 		int i = this.x + 44;
 		int j = this.y;
@@ -119,4 +120,6 @@ public class DesignSelectionWidget extends Widget {
 		return true;
 	}
 	
+	@Override
+	public void updateNarration(NarrationElementOutput pNarrationElementOutput) {}
 }

@@ -2,34 +2,49 @@ package withoutaname.mods.withoutawallpaper.items;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import withoutaname.mods.withoutawallpaper.blocks.WallpaperTile;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.IItemRenderProperties;
+import withoutaname.mods.withoutawallpaper.blocks.WallpaperEntity;
 import withoutaname.mods.withoutawallpaper.setup.Registration;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
+
+import java.util.function.Consumer;
 
 public class WallpaperItem extends Item {
 	
 	public WallpaperItem() {
-		super(new Item.Properties().setISTER(() -> WallpaperItemStackRenderer::new));
+		super(new Item.Properties());
+	}
+	
+	@Override
+	public void initializeClient(@Nonnull Consumer<IItemRenderProperties> consumer) {
+		consumer.accept(new IItemRenderProperties() {
+			final BlockEntityWithoutLevelRenderer renderer = new WallpaperItemStackRenderer();
+			
+			@Override
+			public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+				return renderer;
+			}
+		});
 	}
 	
 	@Nonnull
 	@Override
-	public ActionResultType useOn(@Nonnull ItemUseContext context) {
-		World world = context.getLevel();
+	public InteractionResult useOn(@Nonnull UseOnContext context) {
+		Level world = context.getLevel();
 		BlockPos pos = world.getBlockState(context.getClickedPos()).getMaterial().isReplaceable() ? context.getClickedPos() : context.getClickedPos().relative(context.getClickedFace());
 		if (world.getBlockState(pos).getMaterial().isReplaceable() || world.getBlockState(pos).getBlock() == Registration.WALLPAPER_BLOCK.get()) {
 			ItemStack stack = context.getItemInHand();
-			CompoundNBT compoundNBT = stack.getOrCreateTag();
+			CompoundTag compoundNBT = stack.getOrCreateTag();
 			if (compoundNBT.contains("wallpaperType")) {
 				BlockState state = world.getBlockState(pos);
 				if (state.getBlock() != Registration.WALLPAPER_BLOCK.get()) {
@@ -38,14 +53,14 @@ public class WallpaperItem extends Item {
 				if (!world.isClientSide) {
 					Direction face = context.getClickedFace().getOpposite();
 					world.setBlockAndUpdate(pos, state);
-					WallpaperTile te = (WallpaperTile) world.getBlockEntity(pos);
+					WallpaperEntity te = (WallpaperEntity) world.getBlockEntity(pos);
 					te.setType(face, WallpaperType.fromNBT(compoundNBT.getCompound("wallpaperType")));
 					context.getItemInHand().shrink(1);
 				} else {
 					context.getPlayer().playSound(Registration.WALLPAPER_BLOCK.get().getSoundType(state, world, pos, context.getPlayer()).getPlaceSound()
 							, 1.0f, 1.0f);
 				}
-				return ActionResultType.SUCCESS;
+				return InteractionResult.SUCCESS;
 			}
 		}
 		return super.useOn(context);

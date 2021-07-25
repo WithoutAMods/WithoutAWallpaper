@@ -2,12 +2,14 @@ package withoutaname.mods.withoutawallpaper.gui.designselection;
 
 import javax.annotation.Nonnull;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
 
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 
@@ -24,7 +26,7 @@ public class DesignButton extends Button {
 	}
 	
 	public DesignButton(int x, int y, @Nonnull IDesignSelectable designSelectable, @Nonnull WallpaperDesign design) {
-		super(x, y, 21, 21, StringTextComponent.EMPTY, (button) -> {});
+		super(x, y, 21, 21, TextComponent.EMPTY, (button) -> {});
 		this.design = design;
 		this.designSelectable = designSelectable;
 	}
@@ -35,10 +37,11 @@ public class DesignButton extends Button {
 	}
 	
 	@Override
-	public void render(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void render(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		if (design != WallpaperDesign.NONE) {
-			Minecraft minecraft = Minecraft.getInstance();
-			minecraft.getTextureManager().bind(GUI_TEXTURE);
+			RenderSystem.setShader(GameRenderer::getPositionTexShader);
+			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.setShaderTexture(0, GUI_TEXTURE);
 			if (design == designSelectable.getDesign()) {
 				blit(matrixStack, x, y, 0, 198, 21, 21);
 			} else if (mouseX >= x && mouseX < x + 21 && mouseY >= y && mouseY < y + 21) {
@@ -46,7 +49,7 @@ public class DesignButton extends Button {
 			} else {
 				blit(matrixStack, x, y, 0, 177, 21, 21);
 			}
-			minecraft.getTextureManager().bind(new ResourceLocation(WithoutAWallpaper.MODID, "textures/block/wallpaper/" + design + "/design.png"));
+			RenderSystem.setShaderTexture(0, new ResourceLocation(WithoutAWallpaper.MODID, "textures/block/wallpaper/" + design + "/design.png"));
 			blit(matrixStack, x + 2, y + 2, 17, 17, 0, 0, 16, 16, 16, 16);
 		}
 	}

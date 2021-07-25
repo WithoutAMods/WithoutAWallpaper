@@ -7,16 +7,17 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
@@ -28,7 +29,7 @@ import withoutaname.mods.withoutawallpaper.setup.Registration;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
-public class PastingTableTile extends TileEntity {
+public class PastingTableEntity extends BlockEntity {
 	
 	private final HashMap<PastingTableContainer, Consumer<WallpaperType>> wallpaperChangedListeners = new HashMap<>();
 	
@@ -38,8 +39,8 @@ public class PastingTableTile extends TileEntity {
 	private final ItemStackHandler itemHandler = createInputHandler();
 	private final LazyOptional<IItemHandler> itemHandlerLazyOptional = LazyOptional.of(() -> itemHandler);
 	
-	public PastingTableTile() {
-		super(Registration.PASTING_TABLE_TILE.get());
+	public PastingTableEntity(BlockPos pos, BlockState state) {
+		super(Registration.PASTING_TABLE_TILE.get(), pos, state);
 	}
 	
 	@Nonnull
@@ -58,8 +59,8 @@ public class PastingTableTile extends TileEntity {
 	}
 	
 	@Override
-	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(getBlockPos(), getBlockPos().offset(1, 1, 1));
+	public AABB getRenderBoundingBox() {
+		return new AABB(getBlockPos(), getBlockPos().offset(1, 1, 1));
 	}
 	
 	private void updateWallpaper() {
@@ -113,36 +114,36 @@ public class PastingTableTile extends TileEntity {
 	
 	@Nonnull
 	@Override
-	public CompoundNBT getUpdateTag() {
-		CompoundNBT tag = super.getUpdateTag();
+	public CompoundTag getUpdateTag() {
+		CompoundTag tag = super.getUpdateTag();
 		writeData(tag);
 		return tag;
 	}
 	
 	@Override
-	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+	public void handleUpdateTag(CompoundTag tag) {
 		readData(tag);
 	}
 	
 	@Nullable
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(worldPosition, 1, getUpdateTag());
+	public ClientboundBlockEntityDataPacket getUpdatePacket() {
+		return new ClientboundBlockEntityDataPacket(worldPosition, 1, getUpdateTag());
 	}
 	
 	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		handleUpdateTag(getBlockState(), pkt.getTag());
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+		handleUpdateTag(pkt.getTag());
 	}
 	
 	@Override
-	public void load(@Nonnull BlockState state, @Nonnull CompoundNBT nbt) {
+	public void load(@Nonnull CompoundTag nbt) {
 		readData(nbt);
-		super.load(state, nbt);
+		super.load(nbt);
 		update();
 	}
 	
-	private void readData(CompoundNBT nbt) {
+	private void readData(CompoundTag nbt) {
 		itemHandler.deserializeNBT(nbt.getCompound("inv"));
 		try {
 			selectedWallpaperDesign = WallpaperDesign.fromString(nbt.getString("selectedDesign"));
@@ -154,13 +155,13 @@ public class PastingTableTile extends TileEntity {
 	
 	@Nonnull
 	@Override
-	public CompoundNBT save(@Nonnull CompoundNBT nbt) {
+	public CompoundTag save(@Nonnull CompoundTag nbt) {
 		writeData(nbt);
 		
 		return super.save(nbt);
 	}
 	
-	private void writeData(CompoundNBT nbt) {
+	private void writeData(CompoundTag nbt) {
 		nbt.put("inv", itemHandler.serializeNBT());
 		nbt.putString("selectedDesign", selectedWallpaperDesign.toString());
 	}

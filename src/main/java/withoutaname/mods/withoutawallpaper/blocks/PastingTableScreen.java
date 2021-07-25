@@ -3,12 +3,12 @@ package withoutaname.mods.withoutawallpaper.blocks;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -23,19 +23,19 @@ import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 @OnlyIn(Dist.CLIENT)
 public class PastingTableScreen extends BaseScreen<PastingTableContainer> implements IDesignSelectable {
 	
-	public PastingTableScreen(PastingTableContainer container, PlayerInventory playerInventory, ITextComponent title) {
+	public PastingTableScreen(PastingTableContainer container, Inventory playerInventory, Component title) {
 		super(container, new ResourceLocation(WithoutAWallpaper.MODID, "textures/gui/container/pasting_table.png"), playerInventory, title, 176, 177);
 	}
 	
 	@Override
 	protected void init() {
 		super.init();
-		addButton(new DesignSelectionWidget(leftPos + 112, topPos + 17, 2, 3, this::addButton, this));
-		addButton(new WallpaperWidget(leftPos + 52, topPos + 41, 40, this::getWallpaperType));
+		addRenderableWidget(new DesignSelectionWidget(leftPos + 112, topPos + 17, 2, 3, this::addRenderableWidget, this));
+		addRenderableWidget(new WallpaperWidget(leftPos + 52, topPos + 41, 40, this::getWallpaperType));
 	}
 	
 	@Override
-	protected void renderBg(@Nonnull MatrixStack matrixStack, float partialTicks, int x, int y) {
+	protected void renderBg(@Nonnull PoseStack matrixStack, float partialTicks, int x, int y) {
 		super.renderBg(matrixStack, partialTicks, x, y);
 		int i = this.leftPos;
 		int j = this.topPos;
@@ -65,7 +65,7 @@ public class PastingTableScreen extends BaseScreen<PastingTableContainer> implem
 		} else if (!menu.getOutputSlot().hasItem()) {
 			return WallpaperType.NONE;
 		}
-		CompoundNBT tag = menu.getOutputSlot().getItem().getTag();
+		CompoundTag tag = menu.getOutputSlot().getItem().getTag();
 		assert tag != null;
 		return WallpaperType.fromNBT(tag.getCompound("wallpaperType"));
 	}

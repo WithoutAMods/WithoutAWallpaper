@@ -5,14 +5,15 @@ import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Nonnull;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.item.DyeColor;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
 
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
 import withoutaname.mods.withoutawallpaper.gui.colorselection.ColorButton;
 import withoutaname.mods.withoutawallpaper.gui.colorselection.ColorSelectionScreen;
@@ -36,7 +37,7 @@ public class WallpaperCatalogGUI extends Screen implements IDesignSelectable {
 	private WallpaperType type = WallpaperType.NONE;
 	
 	public WallpaperCatalogGUI() {
-		super(new TranslationTextComponent("screen." + WithoutAWallpaper.MODID + ".wallpaper_catalog"));
+		super(new TranslatableComponent("screen." + WithoutAWallpaper.MODID + ".wallpaper_catalog"));
 	}
 	
 	@Override
@@ -45,7 +46,7 @@ public class WallpaperCatalogGUI extends Screen implements IDesignSelectable {
 		guiTop = (height - ySize) / 2;
 		for (int i = 0; i < 3; i++) {
 			int finalI = i;
-			addButton(new ColorButton(guiLeft + 10 + i * 24, guiTop + 10, () -> colors[finalI], button -> {
+			addRenderableWidget(new ColorButton(guiLeft + 10 + i * 24, guiTop + 10, () -> colors[finalI], button -> {
 				assert minecraft != null;
 				Colors[] availableColors = design.getAvailableColors();
 				List<DyeColor> colors = availableColors.length > finalI ? availableColors[finalI].getColors() : new ArrayList<>();
@@ -55,22 +56,22 @@ public class WallpaperCatalogGUI extends Screen implements IDesignSelectable {
 				}));
 			}, this));
 		}
-		addButton(new WallpaperWidget(guiLeft + 16, guiTop + 40, 56, () -> type));
-		addButton(new DesignSelectionWidget(guiLeft + 89, guiTop + 11, 2, 4, this::addButton, this));
+		addRenderableWidget(new WallpaperWidget(guiLeft + 16, guiTop + 40, 56, () -> type));
+		addRenderableWidget(new DesignSelectionWidget(guiLeft + 89, guiTop + 11, 2, 4, this::addRenderableWidget, this));
 		
 	}
 	
 	@Override
-	public void render(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void render(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack);
 		this.drawGuiBackgroundLayer(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 	}
 	
-	protected void drawGuiBackgroundLayer(MatrixStack matrixStack) {
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		assert this.minecraft != null;
-		this.minecraft.getTextureManager().bind(GUI_TEXTURE);
+	protected void drawGuiBackgroundLayer(PoseStack matrixStack) {
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, GUI_TEXTURE);
 		int i = this.guiLeft;
 		int j = this.guiTop;
 		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
