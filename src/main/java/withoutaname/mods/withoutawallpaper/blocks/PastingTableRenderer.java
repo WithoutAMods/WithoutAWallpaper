@@ -7,7 +7,6 @@ import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -15,6 +14,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import withoutaname.mods.withoutalib.blocks.BaseRenderer;
 import withoutaname.mods.withoutawallpaper.WithoutAWallpaper;
 import withoutaname.mods.withoutawallpaper.setup.Registration;
 import withoutaname.mods.withoutawallpaper.tools.WallpaperDesign;
@@ -22,7 +22,7 @@ import withoutaname.mods.withoutawallpaper.tools.WallpaperType;
 
 import javax.annotation.Nonnull;
 
-public class PastingTableRenderer implements BlockEntityRenderer<PastingTableEntity> {
+public class PastingTableRenderer extends BaseRenderer<PastingTableEntity> {
 	
 	public static final ResourceLocation DYES_TEXTURE = new ResourceLocation(WithoutAWallpaper.MODID, "block/pasting_table/dyes");
 	
@@ -32,21 +32,8 @@ public class PastingTableRenderer implements BlockEntityRenderer<PastingTableEnt
 		BlockEntityRenderers.register(Registration.PASTING_TABLE_TILE.get(), PastingTableRenderer::new);
 	}
 	
-	private void add(VertexConsumer builder, PoseStack stack, float x, float y, float z, float u, float v) {
-		add(builder, stack, x, y, z, u, v, new float[]{1.0f, 1.0f, 1.0f, 1.0f});
-	}
-	
-	private void add(VertexConsumer builder, PoseStack stack, float x, float y, float z, float u, float v, float[] color) {
-		builder.vertex(stack.last().pose(), x, y, z)
-				.color(color[0], color[1], color[2], color.length > 3 ? color[3] : 1.0f)
-				.uv(u, v)
-				.uv2(0, 240)
-				.normal(0, 1, 0)
-				.endVertex();
-	}
-	
 	@Override
-	public void render(PastingTableEntity tileEntityIn, float partialTicks, PoseStack matrixStackIn, @Nonnull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+	public void render(@Nonnull PastingTableEntity tileEntityIn, float partialTicks, @Nonnull PoseStack matrixStackIn, @Nonnull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		matrixStackIn.pushPose();
 		Quaternion rotation = switch (tileEntityIn.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING)) {
 			default -> Vector3f.YP.rotationDegrees(0);
