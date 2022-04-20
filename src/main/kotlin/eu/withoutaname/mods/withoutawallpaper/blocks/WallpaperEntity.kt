@@ -5,4 +5,4 @@ import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 
-class WallpaperEntity(pos: BlockPos, state: BlockState) : BlockEntity(Registration.WALLPAPER_ENTITY.get(), pos, state)
+class WallpaperEntity(pos: BlockPos, state: BlockState) : BlockEntity(Registration.WALLPAPER_ENTITY, pos, state)

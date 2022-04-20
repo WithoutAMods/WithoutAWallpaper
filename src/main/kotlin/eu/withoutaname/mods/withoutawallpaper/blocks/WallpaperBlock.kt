@@ -4,13 +4,12 @@ import net.minecraft.core.BlockPos
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.entity.BlockEntity
-import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.Material
 import net.minecraftforge.common.util.ForgeSoundType
 
 object WallpaperBlock : BaseEntityBlock(
-    BlockBehaviour.Properties.of(Material.DECORATION).sound(
+    Properties.of(Material.DECORATION).sound(
         ForgeSoundType(
             1f,
             1f,
